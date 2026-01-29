@@ -14,6 +14,7 @@ from haystack.components.builders import PromptBuilder
 from haystack.components.converters import PyPDFToDocument, TextFileToDocument
 from haystack.components.preprocessors import DocumentSplitter
 from haystack.components.writers import DocumentWriter
+from haystack.components.joiners import DocumentJoiner
 
 from haystack_integrations.components.generators.ollama import OllamaGenerator
 from haystack_integrations.document_stores.chroma import ChromaDocumentStore
@@ -107,6 +108,8 @@ class RAGPipeline:
         pdf_converter = PyPDFToDocument()
         txt_converter = TextFileToDocument()
 
+        joiner = DocumentJoiner()
+
         splitter = DocumentSplitter(
             split_by="sentence",
             split_length=self.config.pipeline.chunk_size,
@@ -115,16 +118,25 @@ class RAGPipeline:
 
         writer = DocumentWriter(document_store=self.document_store)
 
+        embedder = OllamaDocumentEmbedder(
+            model=self.config.ollama.embedding_model,
+            url=self.config.ollama.server_url,
+            timeout=self.config.ollama.timeout,
+        )
+
         self.indexing_pipeline.add_component("pdf_converter", pdf_converter)
         self.indexing_pipeline.add_component("txt_converter", txt_converter)
+        self.indexing_pipeline.add_component("joiner", joiner)
         self.indexing_pipeline.add_component("splitter", splitter)
-        self.indexing_pipeline.add_component("embedder", self.doc_embedder)
+        self.indexing_pipeline.add_component("embedder", embedder)
         self.indexing_pipeline.add_component("writer", writer)
 
-        # self.indexing_pipeline.connect("pdf_converter.documents", "splitter.documents")
-        # self.indexing_pipeline.connect("txt_converter.documents", "splitter.documents")
-        # self.indexing_pipeline.connect("splitter.documents", "embedder.documents")
-        # self.indexing_pipeline.connect("embedder.documents", "writer.documents")
+        self.indexing_pipeline.connect("pdf_converter.documents", "joiner.documents")
+        self.indexing_pipeline.connect("txt_converter.documents", "joiner.documents")
+        self.indexing_pipeline.connect("joiner.documents", "splitter.documents")
+        self.indexing_pipeline.connect("splitter.documents", "embedder.documents")
+        self.indexing_pipeline.connect("embedder.documents", "writer.documents")
+
         log.info("Indexing pipeline initialized")
 
     def _setup_query_pipeline(self):
@@ -167,7 +179,13 @@ class RAGPipeline:
             },
         )
 
-        self.query_pipeline.add_component("text_embedder", self.text_embedder)
+        text_embedder = OllamaTextEmbedder(
+            model=self.config.ollama.embedding_model,
+            url=self.config.ollama.server_url,
+            timeout=self.config.ollama.timeout,
+        )
+
+        self.query_pipeline.add_component("text_embedder", text_embedder)
         self.query_pipeline.add_component("retriever", retriever)
         self.query_pipeline.add_component("prompt_builder", prompt_builder)
         self.query_pipeline.add_component("llm", ollama_generator)
@@ -368,8 +386,14 @@ class RAGPipeline:
 
         async with self._lock:
             try:
-                # Fix later: loop through the documents and pass the ids of document
-                self.document_store.delete_documents(document_ids=[""])
+                all_docs = self.document_store.filter_documents()
+
+                if all_docs:
+                    doc_ids = [doc.id for doc in all_docs]
+                    self.document_store.delete_documents(document_ids=doc_ids)
+                    log.info("No documents to delete")
+                else:
+                    log.info("No documents to delete")
 
                 self.document_store = ChromaDocumentStore(
                     collection_name=self.config.chromadb.collection_name,
@@ -381,7 +405,11 @@ class RAGPipeline:
 
                 log.info("All documents cleared successfully")
 
-                return {"status": "success", "message": "All documents cleared"}
+                return {
+                    "status": "success",
+                    "message": "All documents cleared",
+                    "documents_deleted": len(all_docs) if all_docs else 0,
+                }
 
             except Exception as e:
                 log.error(f"Failed to clear documents: {str(e)}")

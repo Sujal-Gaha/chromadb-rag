@@ -144,3 +144,6 @@ cython_debug/
 
 # Chroma db local
 chroma_data/
+
+# Logs
+logs/
