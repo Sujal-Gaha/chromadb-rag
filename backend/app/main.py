@@ -121,6 +121,24 @@ async def list_uploaded_files():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get("/api/documents")
+async def list_documents(limit: int = 100):
+    try:
+        docs = rag_pipeline.document_store.filter_documents()[:limit]
+
+        return [
+            {
+                "doc_id": doc.id,
+                "filename": doc.meta.get("filename"),
+                "score": doc.score if hasattr(doc, "score") else None,
+                "content": doc.content,
+            }
+            for doc in docs
+        ]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get("/health")
 async def health_check():
     return {
