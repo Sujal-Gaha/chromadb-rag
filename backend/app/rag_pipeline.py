@@ -9,12 +9,11 @@ from contextlib import asynccontextmanager
 
 from fastapi import UploadFile
 
-from haystack import Document, Pipeline
+from haystack import Pipeline
 from haystack.components.builders import PromptBuilder
 from haystack.components.converters import PyPDFToDocument, TextFileToDocument
 from haystack.components.preprocessors import DocumentSplitter
 from haystack.components.writers import DocumentWriter
-from haystack.components.joiners import DocumentJoiner
 
 from haystack.document_stores.types.policy import DuplicatePolicy
 from haystack_integrations.components.generators.ollama import OllamaGenerator
@@ -49,8 +48,6 @@ class RAGPipeline:
 
             self._setup_chromadb()
 
-            # self._initialize_embedders()
-
             self._setup_indexing_pipeline()
             self._setup_query_pipeline()
 
@@ -84,23 +81,6 @@ class RAGPipeline:
                 collection_name=self.config.chromadb.collection_name,
             )
             log.warning("ChromaDB initialized without persistence (in-memory)")
-
-    def _initialize_embedders(self):
-        log.info("Initializing Ollama embedders")
-        log.info(f"  Model: {self.config.ollama.embedding_model}")
-        log.info(f"  Server: {self.config.ollama.server_url}")
-
-        self.doc_embedder = OllamaDocumentEmbedder(
-            model=self.config.ollama.embedding_model,
-            url=self.config.ollama.server_url,
-            timeout=self.config.ollama.timeout,
-        )
-
-        self.text_embedder = OllamaTextEmbedder(
-            model=self.config.ollama.embedding_model,
-            url=self.config.ollama.server_url,
-            timeout=self.config.ollama.timeout,
-        )
 
     def _setup_indexing_pipeline(self):
         """Setup indexing pipelines for PDF and TXT files"""

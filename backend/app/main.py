@@ -87,7 +87,40 @@ async def clear_documents():
     return result
 
 
-# Optional: Health check endpoint
+@app.get("/api/files")
+async def list_uploaded_files():
+    try:
+        docs = rag_pipeline.document_store.filter_documents()
+
+        files = {}
+
+        for doc in docs:
+            filename = doc.meta.get("filename", "unknown")
+            content = doc.content or ""
+
+            if filename not in files:
+                files[filename] = {
+                    "filename": filename,
+                    "file_type": doc.meta.get("file_type"),
+                    "upload_time": doc.meta.get("upload_time"),
+                    "chunks": [],
+                }
+
+            files[filename]["chunks"].append(
+                {
+                    "doc_id": doc.id,
+                    "content_preview": (
+                        content[:120] + "..." if len(content) > 120 else content
+                    ),
+                }
+            )
+
+        return {"total_files": len(files), "files": list(files.values())}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get("/health")
 async def health_check():
     return {
