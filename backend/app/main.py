@@ -1,9 +1,23 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
-from typing import List
+from fastapi.middleware.cors import CORSMiddleware
+from typing import List, Optional
+
+import uvicorn
+
+from app.model import QueryRequest
+
 from .rag_pipeline import RAGPipeline
 
 app = FastAPI()
 rag_pipeline = RAGPipeline()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")
@@ -18,6 +32,18 @@ async def home():
 
 @app.post("/api/upload")
 async def upload_files(files: List[UploadFile] = File(...)):
+    """
+    Accept multiple files from form-data
+    Example frontend usage:
+    const formData = new FormData();
+    formData.append("files", file1);
+    formData.append("files", file2);
+
+    fetch("/api/upload", {
+        method: "POST",
+        body: formData
+    })
+    """
     try:
         result = await rag_pipeline.index_files(files)
         return result
@@ -25,10 +51,25 @@ async def upload_files(files: List[UploadFile] = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/api/query")
-async def query(question: str):
+@app.post("/api/upload/single")
+async def upload_single_file(
+    file: UploadFile = File(...),
+    metadata: Optional[str] = None,
+):
+    """
+    Alternative endpoint for single file upload
+    """
     try:
-        result = await rag_pipeline.query(question)
+        result = await rag_pipeline.index_files([file])
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/query")
+async def query(payload: QueryRequest):
+    try:
+        result = await rag_pipeline.query(payload.question)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -44,3 +85,17 @@ async def document_count():
 async def clear_documents():
     result = await rag_pipeline.clear_documents()
     return result
+
+
+# Optional: Health check endpoint
+@app.get("/health")
+async def health_check():
+    return {
+        "status": "healthy",
+        "initialized": rag_pipeline.initialized,
+        "document_count": await rag_pipeline.get_document_count(),
+    }
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

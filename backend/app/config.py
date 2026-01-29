@@ -82,8 +82,8 @@ class PipelineConfig:
 
         if self.chunk_size <= 0:
             errors.append(f"CHUNK_SIZE must be positive, got: {self.chunk_size}")
-        if self.chunk_size > 50:
-            errors.append(f"CHUNK_SIZE too large (max 50), got: {self.chunk_size}")
+        if self.chunk_size > 500:
+            errors.append(f"CHUNK_SIZE too large (max 500), got: {self.chunk_size}")
 
         if self.chunk_overlap < 0:
             errors.append(

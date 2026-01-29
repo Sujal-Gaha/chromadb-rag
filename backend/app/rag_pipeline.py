@@ -16,6 +16,7 @@ from haystack.components.preprocessors import DocumentSplitter
 from haystack.components.writers import DocumentWriter
 from haystack.components.joiners import DocumentJoiner
 
+from haystack.document_stores.types.policy import DuplicatePolicy
 from haystack_integrations.components.generators.ollama import OllamaGenerator
 from haystack_integrations.document_stores.chroma import ChromaDocumentStore
 from haystack_integrations.components.retrievers.chroma import ChromaEmbeddingRetriever
@@ -48,7 +49,7 @@ class RAGPipeline:
 
             self._setup_chromadb()
 
-            self._initialize_embedders()
+            # self._initialize_embedders()
 
             self._setup_indexing_pipeline()
             self._setup_query_pipeline()
@@ -102,42 +103,45 @@ class RAGPipeline:
         )
 
     def _setup_indexing_pipeline(self):
-        """Setup indexing pipeline for processing documents"""
-        self.indexing_pipeline = Pipeline()
+        """Setup indexing pipelines for PDF and TXT files"""
 
-        pdf_converter = PyPDFToDocument()
-        txt_converter = TextFileToDocument()
+        def build_pipeline(converter):
+            pipeline = Pipeline()
 
-        joiner = DocumentJoiner()
+            pipeline.add_component("converter", converter)
+            pipeline.add_component(
+                "splitter",
+                DocumentSplitter(
+                    split_by="word",
+                    split_length=self.config.pipeline.chunk_size,
+                    split_overlap=self.config.pipeline.chunk_overlap,
+                ),
+            )
+            pipeline.add_component(
+                "embedder",
+                OllamaDocumentEmbedder(
+                    model=self.config.ollama.embedding_model,
+                    url=self.config.ollama.server_url,
+                    timeout=self.config.ollama.timeout,
+                ),
+            )
+            pipeline.add_component(
+                "writer",
+                DocumentWriter(
+                    document_store=self.document_store, policy=DuplicatePolicy.OVERWRITE
+                ),
+            )
 
-        splitter = DocumentSplitter(
-            split_by="sentence",
-            split_length=self.config.pipeline.chunk_size,
-            split_overlap=self.config.pipeline.chunk_overlap,
-        )
+            pipeline.connect("converter.documents", "splitter.documents")
+            pipeline.connect("splitter.documents", "embedder.documents")
+            pipeline.connect("embedder.documents", "writer.documents")
 
-        writer = DocumentWriter(document_store=self.document_store)
+            return pipeline
 
-        embedder = OllamaDocumentEmbedder(
-            model=self.config.ollama.embedding_model,
-            url=self.config.ollama.server_url,
-            timeout=self.config.ollama.timeout,
-        )
+        self.pdf_indexing_pipeline = build_pipeline(PyPDFToDocument())
+        self.txt_indexing_pipeline = build_pipeline(TextFileToDocument())
 
-        self.indexing_pipeline.add_component("pdf_converter", pdf_converter)
-        self.indexing_pipeline.add_component("txt_converter", txt_converter)
-        self.indexing_pipeline.add_component("joiner", joiner)
-        self.indexing_pipeline.add_component("splitter", splitter)
-        self.indexing_pipeline.add_component("embedder", embedder)
-        self.indexing_pipeline.add_component("writer", writer)
-
-        self.indexing_pipeline.connect("pdf_converter.documents", "joiner.documents")
-        self.indexing_pipeline.connect("txt_converter.documents", "joiner.documents")
-        self.indexing_pipeline.connect("joiner.documents", "splitter.documents")
-        self.indexing_pipeline.connect("splitter.documents", "embedder.documents")
-        self.indexing_pipeline.connect("embedder.documents", "writer.documents")
-
-        log.info("Indexing pipeline initialized")
+        log.info("Indexing pipelines (PDF, TXT) initialized")
 
     def _setup_query_pipeline(self):
         """Setup query pipeline for answering questions"""
@@ -198,59 +202,6 @@ class RAGPipeline:
 
         log.info("Query pipeline initialized")
 
-    async def _process_uploaded_file(self, file: UploadFile) -> list[Document]:
-        """Process a single uploaded file asynchronously"""
-        if not file.filename:
-            raise ValueError("File must have a filename")
-
-        log.info(f"Processing file: {file.filename}")
-        suffix = Path(file.filename).suffix.lower()
-
-        content = await file.read()
-
-        with tempfile.NamedTemporaryFile(
-            delete=False, suffix=suffix, mode="wb"
-        ) as tmp_file:
-            tmp_file.write(content)
-            tmp_path = tmp_file.name
-
-        try:
-            if suffix == ".pdf":
-                result = self.indexing_pipeline.run(
-                    {"pdf_converter": {"sources": [tmp_path]}}
-                )
-                documents = result["pdf_converter"]["documents"]
-            elif suffix == ".txt":
-                result = self.indexing_pipeline.run(
-                    {"txt_converter": {"sources": [tmp_path]}}
-                )
-                documents = result["txt_converter"]["documents"]
-            else:
-                raise ValueError(
-                    f"Unsupported file type: {suffix}. Supported types: .pdf, .txt"
-                )
-
-            for doc in documents:
-                doc.meta.update(
-                    {
-                        "filename": file.filename,
-                        "upload_time": time.strftime("%Y-%m-%d %H:%M:%S"),
-                        "file_type": suffix,
-                    }
-                )
-
-            log.info(f"Extracted {len(documents)} document(s) from {file.filename}")
-            return documents
-
-        except Exception as e:
-            log.error(f"Error processing {file.filename}: {str(e)}")
-            raise
-        finally:
-            try:
-                os.unlink(tmp_path)
-            except Exception as e:
-                log.warning(f"Could not delete temp file {tmp_path}: {e}")
-
     async def index_files(self, files: list[UploadFile]) -> dict[str, Any]:
         """Index uploaded files asynchronously"""
         if not files:
@@ -267,29 +218,36 @@ class RAGPipeline:
 
         async with self._lock:
             for idx, file in enumerate(files, 1):
+                tmp_path = None
                 try:
                     log.info(f"[{idx}/{len(files)}] Processing: {file.filename}")
 
-                    documents = await self._process_uploaded_file(file)
+                    suffix = Path(file.filename or "").suffix.lower()
+                    content = await file.read()
 
-                    if documents:
-                        split_result = self.indexing_pipeline.run(
-                            {"splitter": {"documents": documents}}
+                    with tempfile.NamedTemporaryFile(
+                        delete=False, suffix=suffix, mode="wb"
+                    ) as tmp_file:
+                        tmp_file.write(content)
+                        tmp_path = tmp_file.name
+
+                    if suffix == ".pdf":
+                        result = self.pdf_indexing_pipeline.run(
+                            {"converter": {"sources": [tmp_path]}}
                         )
-                        split_docs = split_result["splitter"]["documents"]
-
-                        embed_result = self.indexing_pipeline.run(
-                            {"embedder": {"documents": split_docs}}
+                    elif suffix == ".txt":
+                        result = self.txt_indexing_pipeline.run(
+                            {"converter": {"sources": [tmp_path]}}
                         )
-                        embedded_docs = embed_result["embedder"]["documents"]
-
-                        self.indexing_pipeline.run(
-                            {"writer": {"documents": embedded_docs}}
+                    else:
+                        raise ValueError(
+                            f"Unsupported file type: {suffix}. Supported types: .pdf, .txt"
                         )
 
-                        total_chunks_created += len(embedded_docs)
-                        log.info(f"  Created {len(embedded_docs)} chunks")
+                    written = result["writer"].get("documents_written", 0)
+                    total_chunks_created += written
 
+                    log.info(f"  Created {written} chunks")
                     processed_files.append(file.filename)
 
                 except Exception as e:
@@ -297,6 +255,12 @@ class RAGPipeline:
                         f"[{idx}/{len(files)}] Failed: {file.filename} - {str(e)}"
                     )
                     errors.append({"filename": file.filename, "error": str(e)})
+                finally:
+                    if tmp_path and os.path.exists(tmp_path):
+                        try:
+                            os.unlink(tmp_path)
+                        except Exception as e:
+                            log.warning(f"Could not delete temp file {tmp_path}: {e}")
 
         elapsed = time.time() - start
 
