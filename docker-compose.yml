@@ -1,0 +1,42 @@
+services:
+  backend:
+    build: ./backend
+    container_name: rag-backend
+    ports:
+      - "8000:8000"
+    extra_hosts:
+      - "ollama-server:100.102.10.70"
+    volumes:
+      - chroma_data:/home/appuser/data/chroma_db
+      - uploads:/home/appuser/uploads
+      - ./files:/app/files  # Optional: mount local files directory
+    environment:
+      # Point to your external Ollama server (update with your Tailscale IP)
+      - OLLAMA_SERVER_URL=${OLLAMA_SERVER_URL:-http://your-ollama-device:11434}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3.2}
+      - OLLAMA_EMBEDDING_MODEL=${OLLAMA_EMBEDDING_MODEL:-nomic-embed-text}
+      - CHROMA_PERSIST_PATH=/home/appuser/data/chroma_db
+      - CHROMA_COLLECTION_NAME=document_collection
+      - CHROMA_UPLOAD_DIR=/home/appuser/uploads
+      - TOP_K=${TOP_K:-4}
+      - CHUNK_SIZE=${CHUNK_SIZE:-3}
+      - CHUNK_OVERLAP=${CHUNK_OVERLAP:-1}
+      - LLM_NUM_PREDICT=${LLM_NUM_PREDICT:-512}
+      - LLM_TEMPERATURE=${LLM_TEMPERATURE:-0.2}
+      - LLM_NUM_CTX=${LLM_NUM_CTX:-2048}
+      - LLM_TOP_P=${LLM_TOP_P:-0.9}
+      - LOG_LEVEL=INFO
+      - CORS_ORIGINS=*
+    env_file:
+      - .env  # Optional: for additional environment variables
+    restart: unless-stopped
+    networks:
+      - rag-network
+
+networks:
+  rag-network:
+    driver: bridge
+
+volumes:
+  chroma_data:
+  uploads:
