@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 
 # Now import your app modules
 from app.rag_pipeline import RAGPipeline
-from evaluation.data import GOLD_DATA
+from .data import GOLD_DATA
 
 
 @dataclass
