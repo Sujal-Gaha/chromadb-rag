@@ -140,15 +140,15 @@ class Config:
         )
 
         self.pipeline = PipelineConfig(
-            top_k=self._get_int_env("TOP_K", 4),
-            chunk_size=self._get_int_env("CHUNK_SIZE", 3),
-            chunk_overlap=self._get_int_env("CHUNK_OVERLAP", 1),
+            top_k=self._get_int_env("TOP_K", 8),
+            chunk_size=self._get_int_env("CHUNK_SIZE", 500),
+            chunk_overlap=self._get_int_env("CHUNK_OVERLAP", 100),
         )
 
         self.llm = LLMConfig(
-            num_predict=self._get_int_env("LLM_NUM_PREDICT", 512),
-            temperature=self._get_float_env("LLM_TEMPERATURE", 0.2),
-            num_ctx=self._get_int_env("LLM_NUM_CTX", 2048),
+            num_predict=self._get_int_env("LLM_NUM_PREDICT", 1024),
+            temperature=self._get_float_env("LLM_TEMPERATURE", 0.1),
+            num_ctx=self._get_int_env("LLM_NUM_CTX", 4096),
             top_p=self._get_float_env("LLM_TOP_P", 0.9),
         )
 

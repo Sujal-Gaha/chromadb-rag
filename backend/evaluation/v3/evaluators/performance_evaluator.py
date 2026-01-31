@@ -1,0 +1,81 @@
+from typing import Any, Optional
+
+from evaluation.v3.base.evaluator_base import (
+    BaseEvaluator,
+    EvaluationResult,
+    EvaluationType,
+)
+
+
+class PerformanceEvaluator(BaseEvaluator):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
+        super().__init__("PerformanceEvaluator", config or {})
+        self.evaluation_type = EvaluationType.PERFORMANCE
+
+        self.target_response_time = self.config.get("target_response_time", 2.0)
+
+    async def evaluate_single(
+        self,
+        question: str,
+        expected_answer: str,
+        generated_answer: str,
+        retrieved_docs: list[str],
+        expected_docs: list[str],
+        metadata: Optional[dict[str, Any]] = None,
+    ) -> list[EvaluationResult]:
+        results = []
+
+        response_time = metadata.get("response_time", 0) if metadata else 0
+        retrieval_count = metadata.get("retrieval_count", 0) if metadata else 0
+
+        if self.target_response_time > 0:
+            time_score = max(0, 1 - (response_time / self.target_response_time))
+        else:
+            time_score = 1.0 if response_time < 5 else 0.5
+
+        results.append(
+            EvaluationResult(
+                evaluator_type=self.name,
+                metric_name="response_time_score",
+                value=time_score,
+                confidence=1.0,
+                metadata={"actual_time": response_time},
+            )
+        )
+
+        optimal_retrieval = len(expected_docs) if expected_docs else 3
+        if retrieval_count > 0:
+            efficiency = min(optimal_retrieval / retrieval_count, 1.0)
+        else:
+            efficiency = 0.0
+
+        results.append(
+            EvaluationResult(
+                evaluator_type=self.name,
+                metric_name="retrieval_efficiency",
+                value=efficiency,
+                confidence=0.0,
+                metadata={
+                    "retrieved_count": retrieval_count,
+                    "expected_count": optimal_retrieval,
+                },
+            )
+        )
+
+        has_answer = bool(
+            generated_answer and generated_answer.strip()
+        ) and not generated_answer.startswith("ERROR")
+
+        results.append(
+            EvaluationResult(
+                evaluator_type=self.name,
+                metric_name="answer_provided",
+                value=float(has_answer),
+                confidence=1.0,
+            )
+        )
+
+        return results
+
+    def cleanup(self):
+        pass

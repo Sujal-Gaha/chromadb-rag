@@ -132,7 +132,7 @@ class RAGPipeline:
         )
 
         template = """
-        You are a helpful assistant that answers questions based on the provided context.
+        You are a helpful assistant that answers questions based ONLY on the provided context.
         
         Context:
         {% for document in documents %}
@@ -140,9 +140,12 @@ class RAGPipeline:
         {% endfor %}
         
         Question: {{ question }}
-        
-        Please provide a clear and concise answer based on the context above. 
-        If the context doesn't contain enough information to answer the question, say so.
+
+        Instructions:
+        1. Answer ONLY using information from the context above.
+        2. If the context doesn't contain relevant information, say "I cannot answer based on the provided documents."
+        3. Be precise and concise.
+        4. Include relevant details from the context.
         
         Answer:
         """
@@ -264,7 +267,6 @@ class RAGPipeline:
         }
 
     async def query(self, question: str) -> dict[str, Any]:
-        """Query the indexed documents"""
         if not self.initialized:
             raise RuntimeError("Pipeline not initialized")
 
@@ -273,20 +275,56 @@ class RAGPipeline:
 
         try:
             result = self.query_pipeline.run(
-                {
+                data={
                     "text_embedder": {"text": question},
                     "prompt_builder": {"question": question},
-                }
+                },
+                include_outputs_from=set(["retriever", "llm", "text_embedder"]),
             )
+
+            log.info("=" * 80)
+            log.info("QUERY RESULT STRUCTURE:")
+            log.info(f"Result keys: {list(result.keys())}")
+
+            for key in result.keys():
+                log.info(f"  {key}: {type(result[key])}")
+                if isinstance(result[key], dict):
+                    log.info(f"    Sub-keys: {list(result[key].keys())}")
+
+            # Check retriever specifically
+            if "retriever" in result:
+                log.info(f"Retriever output: {result['retriever']}")
+                if "documents" in result["retriever"]:
+                    docs = result["retriever"]["documents"]
+                    log.info(f"Number of documents from retriever: {len(docs)}")
+                    if docs:
+                        log.info(f"First document type: {type(docs[0])}")
+                        log.info(f"First document: {docs[0]}")
+
+            log.info("=" * 80)
 
             reply = result["llm"]["replies"][0]
             retrieved_docs = result.get("retriever", {}).get("documents", [])
 
             sources = []
             for doc in retrieved_docs[:3]:
+                # Extract filename from meta
+                filename = (
+                    doc.meta.get("file_path")
+                    or doc.meta.get("filename")
+                    or doc.meta.get("name")
+                    or "unknown"
+                )
+
+                # Clean filename
+                if "/" in filename:
+                    filename = filename.split("/")[-1]
+
+                log.info(f"Processing document with filename: {filename}")
+
                 sources.append(
                     {
-                        "filename": doc.meta.get("filename", "unknown"),
+                        "filename": filename,
                         "score": doc.score if hasattr(doc, "score") else None,
                         "content": (
                             doc.content[:200] + "..."
@@ -298,6 +336,8 @@ class RAGPipeline:
 
             elapsed_time = time.time() - start_time
             log.info(f"Query completed in {elapsed_time:.2f}s")
+            log.info(f"Retrieved {len(retrieved_docs)} documents")
+            log.info(f"Created {len(sources)} sources")
 
             return {
                 "reply": reply,
@@ -308,7 +348,7 @@ class RAGPipeline:
             }
 
         except Exception as e:
-            log.error(f"Query failed: {str(e)}")
+            log.error(f"Query failed: {str(e)}", exc_info=True)
             raise
 
     async def get_document_count(self) -> int:
