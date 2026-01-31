@@ -1,12 +1,15 @@
+from haystack.logging import getLogger
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
 
-from typing import Dict, List, Optional, cast
+from typing import Optional, cast
 from pathlib import Path
 from matplotlib.figure import Figure
 from pandas import Series
+
+log = getLogger(__name__)
 
 
 class EvaluationVisualizer:
@@ -28,7 +31,6 @@ class EvaluationVisualizer:
         title: Optional[str] = None,
         save_path: Optional[str] = None,
     ) -> Figure:
-        """Plot distribution of a metric"""
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
         ax1.hist(df[metric_column], bins=20, alpha=0.7, edgecolor="black")
@@ -77,7 +79,7 @@ class EvaluationVisualizer:
     ) -> Figure:
         """Compare metrics across difficulty levels"""
         if "difficulty" not in df.columns:
-            print("⚠️ No difficulty column found in data")
+            log.warning("No difficulty column found in data")
             raise ValueError("No difficulty column found in data")
 
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
@@ -127,11 +129,10 @@ class EvaluationVisualizer:
     def plot_correlation_matrix(
         self,
         df: pd.DataFrame,
-        metric_columns: List[str],
+        metric_columns: list[str],
         title: str = "Metric Correlations",
         save_path: Optional[str] = None,
     ) -> Figure:
-        """Plot correlation matrix between metrics"""
         numeric_cols = [
             col
             for col in metric_columns
@@ -139,7 +140,7 @@ class EvaluationVisualizer:
         ]
 
         if len(numeric_cols) < 2:
-            print("⚠️ Not enough numeric columns for correlation matrix")
+            log.warning("Not enough numeric columns for correlation matrix")
             raise ValueError("Not enough numeric columns for correlation matrix")
 
         df_numeric = cast(pd.DataFrame, df[numeric_cols])
@@ -151,7 +152,6 @@ class EvaluationVisualizer:
 
         for i in range(len(numeric_cols)):
             for j in range(len(numeric_cols)):
-                # Fix: Use explicit x, y, and s parameters
                 ax.text(
                     x=j,
                     y=i,
@@ -183,9 +183,8 @@ class EvaluationVisualizer:
         title: str = "Response Time Analysis",
         save_path: Optional[str] = None,
     ) -> Figure:
-        """Analyze response times"""
         if "response_time" not in df.columns:
-            print("⚠️ No response_time column found")
+            log.warning("No response_time column found")
             raise ValueError("No response_time column found")
 
         fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(14, 10))
@@ -248,12 +247,11 @@ class EvaluationVisualizer:
         df: pd.DataFrame,
         output_dir: str = "evaluation_reports",
         batch_id: Optional[str] = None,
-    ) -> Dict[str, str]:
-        """Create a comprehensive report with multiple visualizations"""
+    ) -> dict[str, str]:
         output_path = Path(output_dir)
         output_path.mkdir(parents=True, exist_ok=True)
 
-        report_files: Dict[str, str] = {}
+        report_files: dict[str, str] = {}
 
         metric_columns = [
             col
@@ -271,7 +269,6 @@ class EvaluationVisualizer:
             )
         ]
 
-        # 1. Similarity distribution
         if "AnswerEvaluator_semantic_similarity" in df.columns:
             try:
                 fig1 = self.plot_metric_distribution(
@@ -285,9 +282,8 @@ class EvaluationVisualizer:
                 self._save_figure(fig1, str(similarity_path))
                 report_files["similarity_distribution"] = str(similarity_path)
             except Exception as e:
-                print(f"⚠️ Failed to create similarity distribution: {e}")
+                log.error(f"Failed to create similarity distribution: {e}")
 
-        # 2. Difficulty comparison
         if (
             "difficulty" in df.columns
             and "AnswerEvaluator_semantic_similarity" in df.columns
@@ -304,9 +300,8 @@ class EvaluationVisualizer:
                 self._save_figure(fig2, str(difficulty_path))
                 report_files["difficulty_comparison"] = str(difficulty_path)
             except Exception as e:
-                print(f"⚠️ Failed to create difficulty comparison: {e}")
+                log.error(f"Failed to create difficulty comparison: {e}")
 
-        # 3. Response time analysis
         if "response_time" in df.columns:
             try:
                 fig3 = self.plot_response_time_analysis(
@@ -316,9 +311,8 @@ class EvaluationVisualizer:
                 self._save_figure(fig3, str(time_path))
                 report_files["response_time_analysis"] = str(time_path)
             except Exception as e:
-                print(f"⚠️ Failed to create response time analysis: {e}")
+                log.error(f"Failed to create response time analysis: {e}")
 
-        # 4. Correlation matrix
         if len(metric_columns) >= 2:
             try:
                 fig4 = self.plot_correlation_matrix(
@@ -331,7 +325,7 @@ class EvaluationVisualizer:
                     self._save_figure(fig4, str(correlation_path))
                     report_files["correlation_matrix"] = str(correlation_path)
             except Exception as e:
-                print(f"⚠️ Failed to create correlation matrix: {e}")
+                log.error(f"Failed to create correlation matrix: {e}")
 
         return report_files
 
@@ -340,4 +334,4 @@ class EvaluationVisualizer:
         Path(filepath).parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(filepath, dpi=self.dpi, bbox_inches="tight")
         plt.close(fig)
-        print(f"  📊 Saved visualization: {filepath}")
+        log.info(f"Saved visualization: {filepath}")

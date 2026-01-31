@@ -16,8 +16,6 @@ log = getLogger(__name__)
 
 
 class AnswerEvaluator(BaseEvaluator):
-    """Evaluates answer quality metrics"""
-
     def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__("AnswerEvaluator", config or {})
         self.evaluation_type = EvaluationType.ANSWER_QUALITY

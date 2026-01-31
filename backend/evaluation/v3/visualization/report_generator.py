@@ -4,15 +4,11 @@ from jinja2 import Template
 
 
 class ReportGenerator:
-    """Generate comprehensive evaluation reports"""
-
     def __init__(self, output_dir: str = "reports"):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def generate_html_report(self, batch_eval, visualizations: Dict[str, str]):
-        """Generate HTML report from evaluation results"""
-
         template_str = """
         <!DOCTYPE html>
         <html>
@@ -74,7 +70,6 @@ class ReportGenerator:
         </html>
         """
 
-        # Render template
         template = Template(template_str)
         html_content = template.render(
             batch_id=batch_eval.batch_id,
@@ -85,15 +80,12 @@ class ReportGenerator:
             visualizations=visualizations,
         )
 
-        # Save HTML file
         report_path = self.output_dir / f"report_{batch_eval.batch_id}.html"
         report_path.write_text(html_content)
 
         return str(report_path)
 
     def generate_markdown_report(self, batch_eval, visualizations: Dict[str, str]):
-        """Generate Markdown report"""
-
         md_content = f"""
 # RAG Evaluation Report
 

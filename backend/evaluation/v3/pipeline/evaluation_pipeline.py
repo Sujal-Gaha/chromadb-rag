@@ -1,5 +1,7 @@
+import os
 import time
 import asyncio
+import re
 
 from datetime import datetime
 from typing import Any, Optional
@@ -15,7 +17,6 @@ from evaluation.v3.base.evaluator_base import (
 )
 from evaluation.v3.base.metrics_store import MetricsStore
 
-# ✓ ADD THIS IMPORT
 from evaluation.v3.data.gold_data import DOCUMENT_CONTENTS
 
 import pandas as pd
@@ -44,37 +45,79 @@ class EvaluationPipeline:
             self.evaluators[evaluator_name].cleanup()
             del self.evaluators[evaluator_name]
 
-    # ✓ ADD THIS NEW METHOD
-    def _create_document_objects(self, filenames: list[str]) -> list[Document]:
-        """
-        Create Haystack Document objects with actual content from DOCUMENT_CONTENTS.
-        This is used for both ground truth and retrieved documents.
-        """
+    def _normalize_filename(self, filename: str) -> str:
+        if not filename:
+            return "unknown.txt"
+
+        clean_name = os.path.basename(filename)
+
+        if clean_name.startswith("tmp") and clean_name.endswith(".txt"):
+            return clean_name
+
+        return clean_name
+
+    def _extract_original_from_temp_filename(
+        self, temp_filename: str, content: str
+    ) -> str:
+        try:
+            title_match = re.search(r"\*\*Title: (.+?)\*\*", content[:500])
+            if title_match:
+                title = title_match.group(1).strip()
+                filename = (
+                    title.lower().replace(" ", "-").replace("’", "").replace("'", "")
+                    + ".txt"
+                )
+                return filename
+
+            lines = content.split("\n")
+            for line in lines[:10]:
+                if "title:" in line.lower():
+                    title = line.lower().replace("title:", "").strip()
+                    if title:
+                        filename = (
+                            title.replace(" ", "-").replace("’", "").replace("'", "")
+                            + ".txt"
+                        )
+                        return filename
+
+            return temp_filename.replace("tmp", "document-")
+
+        except Exception as e:
+            log.warning(f"Failed to extract original from temp filename: {e}")
+            return temp_filename
+
+    def _create_document_objects(
+        self, filenames: list[str], is_retrieved: bool = False
+    ) -> list[Document]:
         docs = []
 
         for filename in filenames:
             if not filename or filename == "unknown":
                 continue
 
-            # Clean the filename (remove paths if present)
-            clean_filename = filename.split("/")[-1] if "/" in filename else filename
+            clean_filename = self._normalize_filename(filename)
 
-            # Get actual content from DOCUMENT_CONTENTS
-            content = DOCUMENT_CONTENTS.get(
-                clean_filename, f"Content from {clean_filename}"
-            )
+            content = DOCUMENT_CONTENTS.get(clean_filename, "")
+
+            if not content and clean_filename.startswith("tmp"):
+                content = f"Content from temporary file: {clean_filename}"
+
+            doc_type = "retrieved" if is_retrieved else "ground_truth"
 
             doc = Document(
                 content=content,
                 meta={
                     "filename": clean_filename,
-                    "document_type": "ground_truth",
+                    "original_filename": clean_filename,
+                    "document_type": doc_type,
+                    "is_temp_file": clean_filename.startswith("tmp"),
                 },
             )
             docs.append(doc)
+            log.debug(f"Created {doc_type} document: {clean_filename}")
 
-        log.debug(
-            f"Created {len(docs)} Document objects from {len(filenames)} filenames"
+        log.info(
+            f"Created {len(docs)} document objects from {len(filenames)} filenames"
         )
         return docs
 
@@ -93,8 +136,10 @@ class EvaluationPipeline:
 
             generated_answer = rag_result.get("reply", "")
             sources = rag_result.get("sources", [])
+
             retrieved_docs = []
 
+            retrieved_filenames = []
             for source in sources:
                 filename = source.get("filename", "")
                 if filename:
@@ -104,20 +149,28 @@ class EvaluationPipeline:
 
             retrieval_count = rag_result.get("retrieved_documents", 0)
 
-            # ============================================================
-            # ✓ CREATE DOCUMENT OBJECTS WITH ACTUAL CONTENT
-            # ============================================================
+            log.info(f"Query completed in {response_time:.2f}s")
+            log.info(f"Retrieved {len(retrieved_filenames)} documents")
+            log.info(f"Created {len(sources)} sources")
 
-            # Create ground truth Document objects with real content
-            expected_doc_objects = self._create_document_objects(expected_docs)
+            expected_doc_objects = self._create_document_objects(
+                expected_docs, is_retrieved=False
+            )
 
-            # Create retrieved Document objects with real content
-            retrieved_doc_objects = self._create_document_objects(retrieved_docs)
+            retrieved_doc_objects = self._create_document_objects(
+                retrieved_docs, is_retrieved=True
+            )
 
             log.debug(f"Created {len(expected_doc_objects)} expected doc objects")
             log.debug(f"Created {len(retrieved_doc_objects)} retrieved doc objects")
 
-            # ============================================================
+            for doc in retrieved_doc_objects:
+                if doc.meta.get("is_temp_file", False):
+                    original_name = self._extract_original_from_temp_filename(
+                        doc.meta["filename"], doc.content if doc.content else ""
+                    )
+                    doc.meta["original_filename"] = original_name
+                    doc.meta["matched_filename"] = original_name
 
             evaluation_results = []
 
@@ -131,29 +184,22 @@ class EvaluationPipeline:
                         "rag_result": rag_result,
                     }
 
-                    # ============================================================
-                    # ✓ DETERMINE WHAT TO PASS TO EACH EVALUATOR
-                    # ============================================================
-
-                    # Check if evaluator needs Document objects or just filenames
-                    # RetrievalEvaluator needs Document objects for proper content comparison
                     if evaluator_name == "RetrievalEvaluator":
                         evaluator_results = await evaluator.evaluate_single(
                             question=question,
                             expected_answer=expected_answer,
                             generated_answer=generated_answer,
-                            retrieved_docs=retrieved_doc_objects,  # ✓ Pass Document objects
-                            expected_docs=expected_doc_objects,  # ✓ Pass Document objects
+                            retrieved_docs=retrieved_doc_objects,
+                            expected_docs=expected_doc_objects,
                             metadata=metadata,
                         )
                     else:
-                        # Other evaluators can use filenames
                         evaluator_results = await evaluator.evaluate_single(
                             question=question,
                             expected_answer=expected_answer,
                             generated_answer=generated_answer,
-                            retrieved_docs=retrieved_docs,  # Filenames
-                            expected_docs=expected_docs,  # Filenames
+                            retrieved_docs=retrieved_docs,
+                            expected_docs=expected_docs,
                             metadata=metadata,
                         )
 

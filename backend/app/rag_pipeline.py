@@ -2,6 +2,7 @@ import os
 import time
 import tempfile
 import asyncio
+import re
 
 from pathlib import Path
 from typing import Any
@@ -83,8 +84,6 @@ class RAGPipeline:
             log.warning("ChromaDB initialized without persistence (in-memory)")
 
     def _setup_indexing_pipeline(self):
-        """Setup indexing pipelines for PDF and TXT files"""
-
         def build_pipeline(converter):
             pipeline = Pipeline()
 
@@ -124,7 +123,6 @@ class RAGPipeline:
         log.info("Indexing pipelines (PDF, TXT) initialized")
 
     def _setup_query_pipeline(self):
-        """Setup query pipeline for answering questions"""
         self.query_pipeline = Pipeline()
 
         retriever = ChromaEmbeddingRetriever(
@@ -186,7 +184,6 @@ class RAGPipeline:
         log.info("Query pipeline initialized")
 
     async def index_files(self, files: list[UploadFile]) -> dict[str, Any]:
-        """Index uploaded files asynchronously"""
         if not files:
             raise ValueError("No files provided for indexing")
 
@@ -282,18 +279,18 @@ class RAGPipeline:
                 include_outputs_from=set(["retriever", "llm", "text_embedder"]),
             )
 
-            log.info("=" * 80)
-            log.info("QUERY RESULT STRUCTURE:")
-            log.info(f"Result keys: {list(result.keys())}")
-
-            for key in result.keys():
-                log.info(f"  {key}: {type(result[key])}")
-                if isinstance(result[key], dict):
-                    log.info(f"    Sub-keys: {list(result[key].keys())}")
+            # log.info("=" * 80)
+            # log.info("QUERY RESULT STRUCTURE:")
+            # log.info(f"Result keys: {list(result.keys())}")
+            #
+            # for key in result.keys():
+            #     log.info(f"  {key}: {type(result[key])}")
+            #     if isinstance(result[key], dict):
+            #         log.info(f"    Sub-keys: {list(result[key].keys())}")
 
             # Check retriever specifically
             if "retriever" in result:
-                log.info(f"Retriever output: {result['retriever']}")
+                # log.debug(f"Retriever output: {result['retriever']}")
                 if "documents" in result["retriever"]:
                     docs = result["retriever"]["documents"]
                     log.info(f"Number of documents from retriever: {len(docs)}")
@@ -307,32 +304,30 @@ class RAGPipeline:
             retrieved_docs = result.get("retriever", {}).get("documents", [])
 
             sources = []
-            for doc in retrieved_docs[:3]:
-                # Extract filename from meta
-                filename = (
-                    doc.meta.get("file_path")
-                    or doc.meta.get("filename")
-                    or doc.meta.get("name")
-                    or "unknown"
-                )
 
-                # Clean filename
-                if "/" in filename:
-                    filename = filename.split("/")[-1]
+            if "retriever" in result and "documents" in result["retriever"]:
+                retrieved_docs = result["retriever"]["documents"]
 
-                log.info(f"Processing document with filename: {filename}")
+                for doc in retrieved_docs:
+                    original_filename = self._extract_filename_from_metadata(doc.meta)
 
-                sources.append(
-                    {
-                        "filename": filename,
-                        "score": doc.score if hasattr(doc, "score") else None,
-                        "content": (
-                            doc.content[:200] + "..."
-                            if len(doc.content) > 200
-                            else doc.content
-                        ),
-                    }
-                )
+                    if original_filename.startswith("tmp"):
+                        original_filename = (
+                            self._extract_original_filename_from_content(doc.content)
+                        )
+
+                    sources.append(
+                        {
+                            "filename": original_filename,
+                            "content": (
+                                doc.content[:200] + "..."
+                                if len(doc.content) > 200
+                                else doc.content
+                            ),
+                            "score": doc.score if hasattr(doc, "score") else 0.0,
+                            "original_meta": doc.meta,
+                        }
+                    )
 
             elapsed_time = time.time() - start_time
             log.info(f"Query completed in {elapsed_time:.2f}s")
@@ -342,7 +337,9 @@ class RAGPipeline:
             return {
                 "reply": reply,
                 "question": question,
-                "retrieved_documents": len(retrieved_docs),
+                "retrieved_documents": (
+                    len(retrieved_docs) if "retrieved_documents" in locals() else 0
+                ),
                 "sources": sources,
                 "elapsed_time": f"{elapsed_time:.2f}s",
             }
@@ -352,7 +349,6 @@ class RAGPipeline:
             raise
 
     async def get_document_count(self) -> int:
-        """Get count of indexed documents"""
         if not self.initialized:
             raise RuntimeError("Pipeline not initialized")
 
@@ -364,7 +360,6 @@ class RAGPipeline:
             return 0
 
     async def clear_documents(self) -> dict[str, Any]:
-        """Clear all indexed documents"""
         if not self.initialized:
             raise RuntimeError("Pipeline not initialized")
 
@@ -399,8 +394,74 @@ class RAGPipeline:
                 log.error(f"Failed to clear documents: {str(e)}")
                 return {"status": "error", "message": str(e)}
 
+    def _extract_original_filename_from_content(self, content: str) -> str:
+        try:
+            lines = content.split("\n")
+            for line in lines:
+                if "**Title:" in line:
+                    title_match = re.search(r"\*\*Title: (.+?)\*\*", line)
+                    if title_match:
+                        title = title_match.group(1).strip()
+                        return self._convert_title_to_filename(title)
+
+                elif "Title:" in line and "**" not in line:
+                    title = line.replace("Title:", "").strip()
+                    return self._convert_title_to_filename(title)
+
+            log.warning(f"Failed to extract filename from content: {content}")
+
+            return "unknown-document.txt"
+
+        except Exception as e:
+            log.warning(f"Failed to extract filename from content: {e}")
+            return "unknown-document.txt"
+
+    def _convert_title_to_filename(self, title: str) -> str:
+        """Convert a title to a standardized filename."""
+        filename = title.lower()
+
+        filename = filename.replace(" ", "-")
+
+        filename = re.sub(r"[^\w\-\.]", "", filename)
+
+        if not filename.endswith(".txt"):
+            filename += ".txt"
+
+        return filename
+
+    def _extract_filename_from_metadata(self, meta: dict) -> str:
+        possible_fields = ["original_filename", "filename", "file_path", "source"]
+
+        for field in possible_fields:
+            if field in meta and meta[field]:
+                file_path = meta[field]
+                filename = os.path.basename(str(file_path))
+
+                if filename.startswith("tmp") and filename.endswith(".txt"):
+                    return filename
+
+                return filename
+
+        return "unknown.txt"
+
+    def _process_document_for_indexing(self, document) -> None:
+        try:
+            content = document.content
+
+            original_filename = self._extract_original_filename_from_content(content)
+
+            if "meta" not in document:
+                document.meta = {}
+
+            document.meta["original_filename"] = original_filename
+            document.meta["filename"] = original_filename
+
+            log.debug(f"Document indexed with original filename: {original_filename}")
+
+        except Exception as e:
+            log.error(f"Error processing document for indexing: {e}")
+
     @asynccontextmanager
     async def batch_indexing(self):
-        """Context manager for batch indexing operations"""
         async with self._lock:
             yield self

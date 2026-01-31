@@ -1,5 +1,7 @@
-from typing import Any, Optional, Union
 import json
+import re
+
+from typing import Any, Optional, Union
 
 from haystack import Document
 from haystack.logging import getLogger
@@ -32,6 +34,42 @@ class RetrievalEvaluator(BaseEvaluator):
             f"RetrievalEvaluator initialized with relevance_threshold: {self.relevance_threshold}"
         )
 
+    def _extract_original_filename(self, doc: Document) -> str:
+        meta = doc.meta or {}
+
+        for field in ["original_filename", "filename", "matched_filename", "file_path"]:
+            if field in meta and meta[field]:
+                filename = meta[field]
+                if "/" in filename:
+                    filename = filename.split("/")[-1]
+                return filename
+
+        content = doc.content or ""
+        if not content:
+            return "unknown.txt"
+
+        title_match = re.search(r"\*\*Title: (.+?)\*\*", content[:500])
+        if title_match:
+            title = title_match.group(1).strip()
+            filename = (
+                title.lower().replace(" ", "-").replace("’", "").replace("'", "")
+                + ".txt"
+            )
+            return filename
+
+        lines = content.split("\n")
+        for line in lines[:10]:
+            if "title:" in line.lower():
+                title = line.lower().replace("title:", "").strip()
+                if title:
+                    filename = (
+                        title.replace(" ", "-").replace("’", "").replace("'", "")
+                        + ".txt"
+                    )
+                    return filename
+
+        return f"document-{hash(content[:100])}.txt"
+
     async def evaluate_single(
         self,
         question: str,
@@ -52,18 +90,15 @@ class RetrievalEvaluator(BaseEvaluator):
             log.warning("No expected answer provided, skipping retrieval evaluation")
             return results
 
-        # ✓ Type narrowing with explicit variable declarations
         ground_truth_docs: list[Document]
         expected_files: list[str]
 
         if expected_docs and isinstance(expected_docs[0], Document):
-            # Already Document objects - use them directly
             ground_truth_docs = expected_docs  # type: ignore
             expected_files = [
                 doc.meta.get("filename", "unknown") for doc in ground_truth_docs
             ]
         else:
-            # Strings - convert to Document objects (fallback)
             expected_files = expected_docs  # type: ignore
             ground_truth_docs = self._create_ground_truth_docs(expected_files)
 
@@ -71,18 +106,15 @@ class RetrievalEvaluator(BaseEvaluator):
         retrieved_files: list[str]
 
         if retrieved_docs and isinstance(retrieved_docs[0], Document):
-            # Already Document objects - use them directly
             retrieved_haystack_docs = retrieved_docs  # type: ignore
             log.debug(f"Retrieved Haystack Documents: {retrieved_haystack_docs}")
             retrieved_files = [
                 doc.meta.get("filename", "unknown") for doc in retrieved_haystack_docs
             ]
         else:
-            # Strings - convert to Document objects (fallback)
             retrieved_files = retrieved_docs  # type: ignore
             retrieved_haystack_docs = self._create_retrieved_docs(retrieved_files)
 
-        # Log what we received
         log.info(f"Expected documents (filenames): {expected_files}")
         log.info(f"Retrieved documents (filenames): {retrieved_files}")
         log.info(f"Number of expected docs: {len(ground_truth_docs)}")
@@ -92,20 +124,18 @@ class RetrievalEvaluator(BaseEvaluator):
             log.debug(f"Question metadata: {json.dumps(metadata, indent=2)}")
 
         try:
-            # Log document details for debugging
-            log.debug("\nGROUND TRUTH DOCUMENTS:")
+            log.debug("GROUND TRUTH DOCUMENTS:")
             for i, doc in enumerate(ground_truth_docs):
-                log.debug(f"  GT Doc {i}:")
-                log.debug(f"    Content: {doc.content[:100] if doc.content else ''}...")
-                log.debug(f"    Meta: {doc.meta}")
+                log.debug(f"GT Doc {i}:")
+                log.debug(f"Content: {doc.content[:100] if doc.content else ''}...")
+                log.debug(f"Meta: {doc.meta}")
 
             log.debug("\nRETRIEVED DOCUMENTS:")
             for i, doc in enumerate(retrieved_haystack_docs):
-                log.debug(f"  Ret Doc {i}:")
-                log.debug(f"    Content: {doc.content[:100] if doc.content else ''}...")
-                log.debug(f"    Meta: {doc.meta}")
+                log.debug(f"Ret Doc {i}:")
+                log.debug(f"Content: {doc.content[:100] if doc.content else ''}...")
+                log.debug(f"Meta: {doc.meta}")
 
-            # Evaluate MAP
             log.info("Evaluating Mean Average Precision (MAP)...")
             map_result = self.map_evaluator.run(
                 ground_truth_documents=[ground_truth_docs],
@@ -123,7 +153,6 @@ class RetrievalEvaluator(BaseEvaluator):
                 )
             )
 
-            # Evaluate MRR
             log.info("Evaluating Mean Reciprocal Rank (MRR)...")
             mrr_result = self.mrr_evaluator.run(
                 ground_truth_documents=[ground_truth_docs],
@@ -141,7 +170,6 @@ class RetrievalEvaluator(BaseEvaluator):
                 )
             )
 
-            # Evaluate Recall
             log.info("Evaluating Document Recall...")
             recall_result = self.recall_evaluator.run(
                 ground_truth_documents=[ground_truth_docs],
@@ -159,7 +187,6 @@ class RetrievalEvaluator(BaseEvaluator):
                 )
             )
 
-            # Calculate context match (simple set intersection)
             log.info("Calculating context match (set intersection)...")
             expected_set = set(expected_files)
             retrieved_set = set(retrieved_files)
@@ -192,7 +219,6 @@ class RetrievalEvaluator(BaseEvaluator):
                 )
             )
 
-            # Summary log
             log.info("=" * 60)
             log.info("RETRIEVAL EVALUATION SUMMARY:")
             log.info("=" * 60)
@@ -229,13 +255,11 @@ class RetrievalEvaluator(BaseEvaluator):
         return results
 
     def _create_ground_truth_docs(self, expected_files: list[str]) -> list[Document]:
-        """Create ground truth documents from expected files (fallback for string input)"""
         docs = []
 
         log.debug(f"Creating ground truth docs from {len(expected_files)} files")
 
         for filename in expected_files:
-            # Extract just the filename without path if present
             clean_filename = filename.split("/")[-1] if "/" in filename else filename
 
             log.debug(f"  Creating GT doc for: {clean_filename}")
@@ -244,6 +268,7 @@ class RetrievalEvaluator(BaseEvaluator):
                 content=f"Relevant content from {clean_filename}",
                 meta={
                     "filename": clean_filename,
+                    "original_filename": clean_filename,
                     "relevant": True,
                     "document_type": "ground_truth",
                 },
@@ -254,7 +279,6 @@ class RetrievalEvaluator(BaseEvaluator):
         return docs
 
     def _create_retrieved_docs(self, filenames: list[str]) -> list[Document]:
-        """Create retrieved documents from filenames (fallback for string input)"""
         docs = []
 
         log.debug(f"Creating retrieved docs from {len(filenames)} files")
@@ -264,14 +288,17 @@ class RetrievalEvaluator(BaseEvaluator):
                 log.warning(f"Skipping invalid filename: {filename}")
                 continue
 
-            # Extract just the filename without path if present
             clean_filename = filename.split("/")[-1] if "/" in filename else filename
 
-            log.debug(f"  Creating retrieved doc for: {clean_filename}")
+            log.debug(f"Creating retrieved doc for: {clean_filename}")
 
             doc = Document(
                 content=f"Retrieved content from {clean_filename}",
-                meta={"filename": clean_filename, "document_type": "retrieved"},
+                meta={
+                    "filename": clean_filename,
+                    "original_filename": clean_filename,
+                    "document_type": "retrieved",
+                },
             )
             docs.append(doc)
 
