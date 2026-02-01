@@ -189,8 +189,8 @@ class RAGPipeline:
         log.info("=" * 70)
         log.info(f"Starting indexing for {len(files)} file(s)")
         log.info("=" * 70)
-        start = time.time()
 
+        start = time.time()
         processed_files = []
         errors = []
         total_chunks_created = 0
@@ -215,14 +215,19 @@ class RAGPipeline:
 
                     log.debug(f"Created temp file: {tmp_path}")
 
+                    meta = {
+                        "original_filename": original_filename,
+                        "filename": original_filename,
+                    }
+
                     # Run indexing pipeline
                     if suffix == ".pdf":
                         result = self.pdf_indexing_pipeline.run(
-                            {"converter": {"sources": [tmp_path]}}
+                            {"converter": {"sources": [tmp_path], "meta": meta}}
                         )
                     elif suffix == ".txt":
                         result = self.txt_indexing_pipeline.run(
-                            {"converter": {"sources": [tmp_path]}}
+                            {"converter": {"sources": [tmp_path], "meta": meta}}
                         )
                     else:
                         raise ValueError(
@@ -230,21 +235,9 @@ class RAGPipeline:
                         )
 
                     written = result["writer"].get("documents_written", 0)
-
-                    # Update metadata IMMEDIATELY after writing
-                    log.info(
-                        f"Updating metadata for {written} chunks from {original_filename}"
-                    )
-                    updated = self._update_document_metadata(
-                        tmp_path, original_filename
-                    )
-                    log.info(
-                        f"Successfully updated {updated} chunks with original filename"
-                    )
-
                     total_chunks_created += written
-
                     log.info(f"Created {written} chunks from {original_filename}")
+
                     processed_files.append(original_filename)
 
                 except Exception as e:
@@ -252,6 +245,7 @@ class RAGPipeline:
                         f"[{idx}/{len(files)}] ✗ Failed: {file.filename} - {str(e)}"
                     )
                     errors.append({"filename": file.filename, "error": str(e)})
+
                 finally:
                     if tmp_path and os.path.exists(tmp_path):
                         try:
@@ -280,53 +274,6 @@ class RAGPipeline:
             "errors": errors,
             "elapsed_time": f"{elapsed:.2f}s",
         }
-
-    def _update_document_metadata(self, temp_path: str, original_filename: str) -> int:
-        try:
-            # Get all documents in the store
-            all_docs = self.document_store.filter_documents()
-
-            updated_count = 0
-            docs_to_update = []
-
-            log.debug(f"Searching for documents with file_path: {temp_path}")
-            log.debug(f"Total documents in store: {len(all_docs)}")
-
-            # Find documents created from this temp file
-            for doc in all_docs:
-                doc_file_path = doc.meta.get("file_path", "")
-
-                # Check if this document came from our temp file
-                if doc_file_path == temp_path:
-                    log.debug(f"Found matching document: {doc.id[:16]}...")
-
-                    # Update metadata
-                    doc.meta["original_filename"] = original_filename
-                    doc.meta["filename"] = original_filename
-
-                    docs_to_update.append(doc)
-                    updated_count += 1
-
-            # Write updated documents back to the store
-            if docs_to_update:
-                log.debug(f"Writing {len(docs_to_update)} updated documents to store")
-                self.document_store.write_documents(
-                    docs_to_update, policy=DuplicatePolicy.OVERWRITE
-                )
-                log.info(
-                    f"Updated {updated_count} chunks with filename: {original_filename}"
-                )
-            else:
-                log.warning(f"No documents found with temp path: {temp_path}")
-                log.warning("This might indicate a timing issue or path mismatch")
-
-            return updated_count
-
-        except Exception as e:
-            log.error(
-                f"Failed to update metadata for {original_filename}: {e}", exc_info=True
-            )
-            return 0
 
     async def query(self, question: str) -> dict[str, Any]:
         if not self.initialized:

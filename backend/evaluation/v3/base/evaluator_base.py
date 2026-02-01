@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 from enum import Enum
 from dataclasses import dataclass, asdict
-from typing import Any, Optional
+from typing import Any, Optional, Union
+
+from haystack import Document
 
 
 class EvaluationType(Enum):
@@ -77,8 +79,8 @@ class BaseEvaluator(ABC):
         question: str,
         expected_answer: str,
         generated_answer: str,
-        retrieved_docs: list[str],
-        expected_docs: list[str],
+        retrieved_docs: Union[list[Document], list[str]],
+        expected_docs: Union[list[Document], list[str]],
         metadata: Optional[dict[str, Any]] = None,
     ) -> list[EvaluationResult]:
         """Evaluate a single question"""
