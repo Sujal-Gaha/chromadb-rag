@@ -26,7 +26,7 @@ from haystack_integrations.components.embedders.ollama import (
 )
 
 from .config import get_config
-from .logger import get_logger
+from utils.logger import get_logger
 
 log = get_logger(__name__)
 
@@ -298,7 +298,6 @@ class RAGPipeline:
             sources = []
             if retrieved_docs:
                 for doc in retrieved_docs:
-                    # Try metadata first (our fix ensures it's there)
                     filename = self._extract_filename_from_metadata(doc.meta)
 
                     # If metadata fails or returns temp/unknown, extract from content
@@ -431,7 +430,6 @@ class RAGPipeline:
         return filename
 
     def _extract_filename_from_metadata(self, meta: dict) -> str:
-        # Try fields in order of preference
         for field in ["original_filename", "filename", "file_path", "source"]:
             if field in meta and meta[field]:
                 file_path = meta[field]

@@ -1,11 +1,15 @@
 from haystack_integrations.document_stores.chroma import ChromaDocumentStore
 import json
 
+from utils.logger import get_logger
+
+log = get_logger(__name__)
+
 
 def diagnose_documents():
-    print("=" * 80)
-    print("CHROMADB DOCUMENT METADATA DIAGNOSTIC")
-    print("=" * 80)
+    log.info("=" * 80)
+    log.info("CHROMADB DOCUMENT METADATA DIAGNOSTIC")
+    log.info("=" * 80)
 
     document_store = ChromaDocumentStore(
         collection_name="document_collection",
@@ -15,7 +19,7 @@ def diagnose_documents():
     # Get all documents
     all_docs = document_store.filter_documents()
 
-    print(f"\nTotal documents in database: {len(all_docs)}\n")
+    log.info(f"Total documents in database: {len(all_docs)}")
 
     # Group by filename
     by_filename = {}
@@ -53,52 +57,51 @@ def diagnose_documents():
             }
         )
 
-    # Print summary
-    print("FILENAME DISTRIBUTION:")
-    print("-" * 80)
+    log.info("FILENAME DISTRIBUTION:")
+    log.info("-" * 80)
     for filename, docs in sorted(by_filename.items()):
-        print(f"\n📄 {filename}")
-        print(f"   Chunks: {len(docs)}")
+        log.info(f"{filename}")
+        log.info(f"Chunks: {len(docs)}")
 
         # Show first chunk's metadata
         if docs:
             first_doc = docs[0]
-            print(f"   First chunk ID: {first_doc['doc_id']}")
-            print(f"   Content: {first_doc['content_preview']}")
-            print(f"   Metadata keys: {list(first_doc['meta'].keys())}")
+            log.info(f"First chunk ID: {first_doc['doc_id']}")
+            log.info(f"Content: {first_doc['content_preview']}")
+            log.info(f"Metadata keys: {list(first_doc['meta'].keys())}")
 
             # Check for original_filename
             if "original_filename" in first_doc["meta"]:
-                print(
-                    f"   ✓ Has original_filename: {first_doc['meta']['original_filename']}"
+                log.info(
+                    f"as original_filename: {first_doc['meta']['original_filename']}"
                 )
             else:
-                print("   ✗ Missing original_filename!")
+                log.warning("Missing original_filename!")
 
-    print("\n" + "=" * 80)
-    print("SUMMARY:")
-    print(f"Total unique files: {len(by_filename)}")
-    print(f"Documents with 'unknown' filename: {unknown_count}")
-    print(f"Documents with 'tmp' filename: {temp_count}")
+    log.info("=" * 80)
+    log.info("SUMMARY:")
+    log.info(f"Total unique files: {len(by_filename)}")
+    log.info(f"Documents with 'unknown' filename: {unknown_count}")
+    log.info(f"Documents with 'tmp' filename: {temp_count}")
 
     if unknown_count > 0 or temp_count > 0:
-        print("\n⚠ WARNING: Some documents have incorrect filenames!")
-        print("   This means the metadata update didn't work properly.")
-        print("   Recommended action: Clear database and re-index files.")
+        log.warning("Some documents have incorrect filenames!")
+        log.warning("This means the metadata update didn't work properly.")
+        log.warning("Recommended action: Clear database and re-index files.")
     else:
-        print("\n✓ All documents have proper filenames!")
+        log.info("All documents have proper filenames!")
 
-    print("=" * 80)
+    log.info("=" * 80)
 
     # Show detailed metadata for first 3 documents
-    print("\nDETAILED METADATA (first 3 documents):")
-    print("-" * 80)
+    log.info("DETAILED METADATA (first 3 documents):")
+    log.info("-" * 80)
     for i, doc in enumerate(all_docs[:3]):
-        print(f"\nDocument {i+1}:")
-        print(f"ID: {doc.id}")
-        print(f"Content preview: {doc.content[:100] if doc.content else ''}...")
-        print("Metadata:")
-        print(json.dumps(doc.meta, indent=2))
+        log.info(f"Document {i+1}:")
+        log.info(f"ID: {doc.id}")
+        log.info(f"Content preview: {doc.content[:100] if doc.content else ''}...")
+        log.info("Metadata:")
+        log.info(json.dumps(doc.meta, indent=2))
 
     return {
         "total_docs": len(all_docs),
@@ -112,9 +115,9 @@ def diagnose_documents():
 if __name__ == "__main__":
     try:
         result = diagnose_documents()
-        print("\n\nReturned data:", json.dumps(result, indent=2))
+        log.info("Returned data:", json.dumps(result, indent=2))
     except Exception as e:
-        print(f"\nERROR: {e}")
+        log.error(f"ERROR: {e}")
         import traceback
 
         traceback.print_exc()

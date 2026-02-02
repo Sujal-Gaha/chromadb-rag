@@ -20,12 +20,14 @@ log = getLogger(__name__)
 
 
 class EvaluationPipeline:
-    def __init__(self, rag_pipeline, config: Optional[dict[str, Any]] = None):
+    def __init__(
+        self,
+        rag_pipeline,
+    ):
         self.rag_pipeline = rag_pipeline
-        self.config = config or {}
-        self.max_retries = self.config.get("max_retries", 3)
-        self.retry_delay = self.config.get("retry_delay", 2)
-        self.batch_delay = self.config.get("batch_delay", 1)
+        self.max_retries = 3
+        self.retry_delay = 2
+        self.batch_delay = 1
         self.evaluators: dict[str, BaseEvaluator] = {}
         self.metrics_store = MetricsStore()
         self.start_time = None
