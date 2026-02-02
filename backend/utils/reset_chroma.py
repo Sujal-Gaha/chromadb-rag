@@ -1,6 +1,9 @@
 import shutil
 import os
-import sys
+
+from .logger import get_logger
+
+log = get_logger(__name__)
 
 
 def reset_chroma():
@@ -9,11 +12,11 @@ def reset_chroma():
     for path in chroma_paths:
         if os.path.exists(path):
             shutil.rmtree(path)
-            print(f"✓ Deleted: {path}")
+            log.info(f"Deleted: {path}")
         else:
-            print(f"✓ No existing data at: {path}")
+            log.info(f"No existing data at: {path}")
 
-    print("\nChromaDB reset complete. Restart your application.")
+    log.info("ChromaDB reset complete. Restart your application.")
 
 
 if __name__ == "__main__":
@@ -21,4 +24,4 @@ if __name__ == "__main__":
     if confirm.lower() == "y":
         reset_chroma()
     else:
-        print("Cancelled.")
+        log.info("Cancelled.")

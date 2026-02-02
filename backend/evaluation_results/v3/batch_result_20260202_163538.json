@@ -1,0 +1,377 @@
+{
+  "batch_id": "batch_20260202_163459",
+  "timestamp": "2026-02-02T16:34:59.751866",
+  "pipeline_version": "1.0",
+  "questions": [
+    {
+      "question": "What happened in the school bus accident when John was a teenager?",
+      "expected_answer": "The school bus skidded on wet pavement and collided with a fallen tree. John's best friend Tommy suffered a broken arm and the bus driver was hospitalized. John emerged unscathed but philosophically unaffected.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-absurd-adolescence-of-john-doe.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "easy",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "How did John react to the school bus accident compared to others?",
+      "expected_answer": "While others were shaken and counselors offered group hugs, John reacted with philosophical detachment. He saw it as 'the universe playing bumper cars with reality' and started a 'Bus Philosophy Club' to discuss existentialism.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-absurd-adolescence-of-john-doe.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "medium",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "What caused the fire that destroyed John's house?",
+      "expected_answer": "The fire was caused by a faulty wire in one of his beloved antique clocks.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-calm-storm-of-john-doe.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "easy",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "How did John react when his house burned down?",
+      "expected_answer": "He remained calm and philosophical, saying 'it seems the house has decided to retire early' and noting 'Fire sales are literal.' He wasn't distraught and rebuilt his life with 'absurd deliberation.'",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-calm-storm-of-john-doe.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "medium",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "Why did the university archive close and what book was John packing last?",
+      "expected_answer": "The university decided to digitize everything and close the physical stacks. The last book John packed was a 17th-century edition of Montaigne's Essays with the phrase 'Que s\u00e7ay-je?' (What do I know?).",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-last-book.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "medium",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "What happened to John at the library when he was 21?",
+      "expected_answer": "He lost his job as a junior assistant due to budget cuts ('last in, first out'). Three positions were eliminated including his.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-library-of-small-disappointments.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "easy",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "What jobs did John apply for after losing his library job?",
+      "expected_answer": "Night security at a self-storage facility, part-time barista at a shop that only served oat-milk lattes, and cataloguing assistant at a private rare-book dealer who required a handwritten essay on why dust is noble. He took the rare-book job.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-library-of-small-disappointments.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "hard",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "What settlement notice did John receive when he was 53?",
+      "expected_answer": "A class-action settlement from a chemical plant that leaked into Evergreen's water supply years earlier. It offered modest compensation for potential long-term health effects.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-ordinary-tuesday.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "medium",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "What happened to John's sister Mara?",
+      "expected_answer": "She was diagnosed with an aggressive form of leukemia and given months to live. John traveled to be with her, read to her, and was present when she died three weeks later.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-quiet-clockwork-of-john-doe.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "medium",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "How did John handle his sister's death?",
+      "expected_answer": "He remained stoic, finished reading the paragraph he was on when she died, sat with her for a while, then added her hospital bracelet to his mementos box labeled 'Act III' and continued with life.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-quiet-clockwork-of-john-doe.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "hard",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "What was John's diagnosis at age 32 and how did he react?",
+      "expected_answer": "He was diagnosed with stage IV pancreatic cancer. He reacted with calm acceptance, asking only 'How long until the coffee stops tasting like coffee?' and continued his routines with minor adjustments.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-uninvited-guest.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "medium",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "What were John's last requests?",
+      "expected_answer": "A fresh pot of terrible coffee and that someone finish cataloguing the unfinished boxes of uncatalogued letters in the archive basement.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-uninvited-guest.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "hard",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "What happened at John's wedding?",
+      "expected_answer": "His fianc\u00e9e Lila called off the wedding the night before due to panic. John still went to the church, waited, then bought a pretzel and fed it to pigeons.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-wedding-that-wasnt.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "easy",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "What was John's philosophy about tragedy throughout his life?",
+      "expected_answer": "He saw tragedy as life's way of reminding us that control is an illusion, the universe's way of editing the plot, or simply 'the universe playing bumper cars with reality.' He believed in accepting absurdity rather than fighting it.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-absurd-adolescence-of-john-doe.txt",
+        "the-calm-storm-of-john-doe.txt",
+        "the-uninvited-guest.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "hard",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    },
+    {
+      "question": "What jobs did John have throughout his life?",
+      "expected_answer": "Junior assistant at Evergreen Public Library, cataloguing assistant at a private rare-book dealer, rare book cataloguer at university archive, librarian, and eventually owner of a secondhand bookstore.",
+      "generated_answer": "ERROR: The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}",
+      "retrieved_docs": [],
+      "expected_docs": [
+        "the-library-of-small-disappointments.txt",
+        "the-last-book.txt",
+        "the-quiet-clockwork-of-john-doe.txt",
+        "the-ordinary-tuesday.txt"
+      ],
+      "response_time": 0.0,
+      "retrieval_count": 0,
+      "difficulty": "hard",
+      "evaluation_results": [
+        {
+          "evaluator_type": "Pipeline",
+          "metric_name": "pipeline_error",
+          "value": 0.0,
+          "confidence": 0.0,
+          "metadata": {
+            "error": "The following component failed to run:\nComponent name: 'retriever'\nComponent type: 'ChromaEmbeddingRetriever'\nError: 'operator' key missing in {'score': {'$gte': 0.68}}"
+          }
+        }
+      ]
+    }
+  ],
+  "aggregated_metrics": {
+    "total_questions": 15,
+    "total_duration": 0,
+    "Pipeline_pipeline_error_mean": 0.0,
+    "Pipeline_pipeline_error_min": 0.0,
+    "Pipeline_pipeline_error_max": 0.0,
+    "Pipeline_pipeline_error_count": 15,
+    "per_difficulty": {
+      "easy": {
+        "Pipeline_pipeline_error_mean": 0.0
+      },
+      "medium": {
+        "Pipeline_pipeline_error_mean": 0.0
+      },
+      "hard": {
+        "Pipeline_pipeline_error_mean": 0.0
+      }
+    },
+    "success_rate": 0.0
+  }
+}

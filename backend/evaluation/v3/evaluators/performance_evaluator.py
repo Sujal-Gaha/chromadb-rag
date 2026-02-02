@@ -1,4 +1,6 @@
-from typing import Any, Optional
+from typing import Any, Optional, Union
+
+from haystack import Document
 
 from evaluation.v3.base.evaluator_base import (
     BaseEvaluator,
@@ -19,8 +21,8 @@ class PerformanceEvaluator(BaseEvaluator):
         question: str,
         expected_answer: str,
         generated_answer: str,
-        retrieved_docs: list[str],
-        expected_docs: list[str],
+        retrieved_docs: Union[list[Document], list[str]],
+        expected_docs: Union[list[Document], list[str]],
         metadata: Optional[dict[str, Any]] = None,
     ) -> list[EvaluationResult]:
         results = []

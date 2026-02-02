@@ -130,37 +130,11 @@ async def list_documents(limit: int = 100):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/api/evaluate-report", response_class=HTMLResponse)
-async def evaluate_and_get_report(batch_size: int = Body(3, embed=True)):
-    try:
-        output_dir = "evaluation_results/v3"
-        batch_result, summary, html_path = await run_evaluation(
-            batch_size=batch_size,
-            output_dir=output_dir,
-            create_visualizations=True,
-            create_reports=True,
-            save_results=True,
-        )
-        if not html_path:
-            raise HTTPException(
-                status_code=500, detail="Failed to generate HTML report"
-            )
-
-        # Read the HTML content
-        with open(html_path, "r") as f:
-            html_content = f.read()
-
-        # Return as HTML response
-        return HTMLResponse(content=html_content)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.post("/api/evaluate-summary", response_class=JSONResponse)
+@app.post("/api/evaluate", response_class=JSONResponse)
 async def evaluate_and_get_summary(batch_size: int = Body(3, embed=True)):
     try:
         output_dir = "evaluation_results/v3"
-        batch_result, summary, html_path = await run_evaluation(
+        batch_result, summary = await run_evaluation(
             batch_size=batch_size,
             output_dir=output_dir,
             create_visualizations=False,
@@ -168,22 +142,6 @@ async def evaluate_and_get_summary(batch_size: int = Body(3, embed=True)):
             save_results=False,
         )
         return JSONResponse(content=summary)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.get("/api/previous-report/{batch_id}", response_class=HTMLResponse)
-async def get_previous_report(batch_id: str):
-    try:
-        output_dir = "evaluation_results/v3"  # Match your default
-        report_path = f"{output_dir}/reports/report_{batch_id}.html"
-        if not Path(report_path).exists():
-            raise HTTPException(status_code=404, detail="Report not found")
-
-        with open(report_path, "r") as f:
-            html_content = f.read()
-
-        return HTMLResponse(content=html_content)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

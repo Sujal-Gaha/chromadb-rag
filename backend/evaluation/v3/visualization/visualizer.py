@@ -126,6 +126,20 @@ class EvaluationVisualizer:
 
         return fig
 
+    def _clean_numeric_columns(self, df: pd.DataFrame, cols: list[str]) -> list[str]:
+        valid_cols = []
+        for col in cols:
+            if col not in df.columns:
+                continue
+            if not pd.api.types.is_numeric_dtype(df[col]):
+                continue
+            if df[col].nunique(dropna=True) <= 1:
+                continue
+            if bool(df[col].isna().all()):
+                continue
+            valid_cols.append(col)
+        return valid_cols
+
     def plot_correlation_matrix(
         self,
         df: pd.DataFrame,
@@ -133,43 +147,32 @@ class EvaluationVisualizer:
         title: str = "Metric Correlations",
         save_path: Optional[str] = None,
     ) -> Figure:
-        numeric_cols = [
-            col
-            for col in metric_columns
-            if col in df.columns and pd.api.types.is_numeric_dtype(df[col])
-        ]
+
+        numeric_cols = self._clean_numeric_columns(df, metric_columns)
 
         if len(numeric_cols) < 2:
-            log.warning("Not enough numeric columns for correlation matrix")
-            raise ValueError("Not enough numeric columns for correlation matrix")
+            raise ValueError("Not enough valid numeric columns for correlation")
 
-        df_numeric = cast(pd.DataFrame, df[numeric_cols])
-        correlation_matrix = df_numeric.corr()
+        df_numeric: pd.DataFrame = df.loc[:, numeric_cols]
+        corr: pd.DataFrame = df_numeric.corr()
 
         fig, ax = plt.subplots(figsize=(10, 8))
-
-        im = ax.imshow(correlation_matrix, cmap="coolwarm", vmin=-1, vmax=1)
-
-        for i in range(len(numeric_cols)):
-            for j in range(len(numeric_cols)):
-                ax.text(
-                    x=j,
-                    y=i,
-                    s=f"{correlation_matrix.iloc[i, j]:.2f}",
-                    ha="center",
-                    va="center",
-                    color="black",
-                )
-
-        ax.set_xticks(np.arange(len(numeric_cols)))
-        ax.set_yticks(np.arange(len(numeric_cols)))
-        ax.set_xticklabels(numeric_cols, rotation=45, ha="right")
-        ax.set_yticklabels(numeric_cols)
-
-        cbar = ax.figure.colorbar(im, ax=ax)
-        cbar.ax.set_ylabel("Correlation", rotation=-90, va="bottom")
+        sns.heatmap(
+            corr,
+            annot=True,
+            fmt=".2f",
+            cmap="coolwarm",
+            vmin=-1,
+            vmax=1,
+            square=True,
+            cbar_kws={"label": "Correlation"},
+            mask=corr.isna(),
+            ax=ax,
+        )
 
         ax.set_title(title)
+        plt.xticks(rotation=45, ha="right")
+        plt.yticks(rotation=0)
         fig.tight_layout()
 
         if save_path:
@@ -183,58 +186,87 @@ class EvaluationVisualizer:
         title: str = "Response Time Analysis",
         save_path: Optional[str] = None,
     ) -> Figure:
+
         if "response_time" not in df.columns:
-            log.warning("No response_time column found")
             raise ValueError("No response_time column found")
 
         fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(14, 10))
 
-        ax1.hist(df["response_time"], bins=20, alpha=0.7, edgecolor="black")
-        ax1.set_xlabel("Response Time (seconds)")
-        ax1.set_ylabel("Frequency")
+        # 1. Histogram
+        ax1.hist(df["response_time"].dropna(), bins="auto", edgecolor="black")
         ax1.set_title("Response Time Distribution")
-        ax1.grid(True, alpha=0.3)
+        ax1.set_xlabel("Seconds")
+        ax1.set_ylabel("Frequency")
 
+        # 2. Quality vs Time OR fallback
         if "AnswerEvaluator_semantic_similarity" in df.columns:
             ax2.scatter(
                 df["response_time"],
                 df["AnswerEvaluator_semantic_similarity"],
                 alpha=0.6,
             )
-            ax2.set_xlabel("Response Time (seconds)")
             ax2.set_ylabel("Semantic Similarity")
             ax2.set_title("Response Time vs Quality")
-            ax2.grid(True, alpha=0.3)
+        else:
+            ax2.text(
+                0.5,
+                0.5,
+                "No quality metric available",
+                ha="center",
+                va="center",
+                transform=ax2.transAxes,
+                fontsize=11,
+                alpha=0.7,
+            )
+            ax2.set_title("Response Time vs Quality")
 
+        ax2.set_xlabel("Seconds")
+
+        # 3. Difficulty boxplot
         if "difficulty" in df.columns:
-            difficulties = df["difficulty"].unique()
-            time_by_difficulty = [
-                df[df["difficulty"] == d]["response_time"] for d in difficulties
-            ]
-            ax3.boxplot(time_by_difficulty, labels=difficulties)
-            ax3.set_xlabel("Difficulty")
-            ax3.set_ylabel("Response Time (seconds)")
+            order = ["easy", "medium", "hard"]
+            data = []
+            labels = []
+
+            for d in order:
+                if d not in df["difficulty"].unique():
+                    continue
+
+                subset: pd.Series = df.loc[df["difficulty"] == d, "response_time"]
+                subset = subset.dropna()
+
+                if not subset.empty:
+                    data.append(subset)
+                    labels.append(d)
+
+            ax3.boxplot(data, labels=labels, showfliers=True)
             ax3.set_title("Response Time by Difficulty")
-            ax3.grid(True, alpha=0.3)
-
-        sorted_times = np.sort(df["response_time"])
-        cdf = np.arange(1, len(sorted_times) + 1) / len(sorted_times)
-        ax4.plot(sorted_times, cdf, linewidth=2)
-        ax4.set_xlabel("Response Time (seconds)")
-        ax4.set_ylabel("Cumulative Probability")
-        ax4.set_title("Cumulative Distribution of Response Times")
-        ax4.grid(True, alpha=0.3)
-
-        for percentile in [50, 75, 90, 95]:
-            time_at_percentile = np.percentile(df["response_time"], percentile)
-            ax4.axvline(x=time_at_percentile, color="r", linestyle="--", alpha=0.5)
-            ax4.text(
-                time_at_percentile, 0.5, f"{percentile}%", rotation=90, va="center"
+            ax3.set_ylabel("Seconds")
+        else:
+            ax3.text(
+                0.5,
+                0.5,
+                "No difficulty data",
+                ha="center",
+                va="center",
+                transform=ax3.transAxes,
             )
 
-        if title:
-            fig.suptitle(title, fontsize=16)
+        # 4. CDF
+        times = np.sort(df["response_time"].dropna())
+        cdf = np.arange(1, len(times) + 1) / len(times)
 
+        ax4.plot(times, cdf, linewidth=2)
+        ax4.set_title("Cumulative Distribution")
+        ax4.set_xlabel("Seconds")
+        ax4.set_ylabel("Probability")
+
+        for p in [50, 75, 90, 95]:
+            t = np.percentile(times, p)
+            ax4.axvline(t, linestyle="--", alpha=0.6)
+            ax4.text(t, 0.02, f"{p}%", rotation=90, va="bottom")
+
+        fig.suptitle(title, fontsize=16)
         fig.tight_layout()
 
         if save_path:

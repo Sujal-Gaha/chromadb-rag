@@ -1,0 +1,46 @@
+question,expected_answer,generated_answer,retrieved_docs,expected_docs,response_time,retrieval_count,difficulty,Pipeline_pipeline_error
+What happened in the school bus accident when John was a teenager?,The school bus skidded on wet pavement and collided with a fallen tree. John's best friend Tommy suf...,"ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-absurd-adolescence-of-john-doe.txt,0.0,0,easy,0.0
+How did John react to the school bus accident compared to others?,"While others were shaken and counselors offered group hugs, John reacted with philosophical detachme...","ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-absurd-adolescence-of-john-doe.txt,0.0,0,medium,0.0
+What caused the fire that destroyed John's house?,The fire was caused by a faulty wire in one of his beloved antique clocks.,"ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-calm-storm-of-john-doe.txt,0.0,0,easy,0.0
+How did John react when his house burned down?,"He remained calm and philosophical, saying 'it seems the house has decided to retire early' and noti...","ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-calm-storm-of-john-doe.txt,0.0,0,medium,0.0
+Why did the university archive close and what book was John packing last?,The university decided to digitize everything and close the physical stacks. The last book John pack...,"ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-last-book.txt,0.0,0,medium,0.0
+What happened to John at the library when he was 21?,"He lost his job as a junior assistant due to budget cuts ('last in, first out'). Three positions wer...","ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-library-of-small-disappointments.txt,0.0,0,easy,0.0
+What jobs did John apply for after losing his library job?,"Night security at a self-storage facility, part-time barista at a shop that only served oat-milk lat...","ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-library-of-small-disappointments.txt,0.0,0,hard,0.0
+What settlement notice did John receive when he was 53?,A class-action settlement from a chemical plant that leaked into Evergreen's water supply years earl...,"ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-ordinary-tuesday.txt,0.0,0,medium,0.0
+What happened to John's sister Mara?,She was diagnosed with an aggressive form of leukemia and given months to live. John traveled to be ...,"ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-quiet-clockwork-of-john-doe.txt,0.0,0,medium,0.0
+How did John handle his sister's death?,"He remained stoic, finished reading the paragraph he was on when she died, sat with her for a while,...","ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-quiet-clockwork-of-john-doe.txt,0.0,0,hard,0.0
+What was John's diagnosis at age 32 and how did he react?,"He was diagnosed with stage IV pancreatic cancer. He reacted with calm acceptance, asking only 'How ...","ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-uninvited-guest.txt,0.0,0,medium,0.0
+What were John's last requests?,A fresh pot of terrible coffee and that someone finish cataloguing the unfinished boxes of uncatalog...,"ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-uninvited-guest.txt,0.0,0,hard,0.0
+What happened at John's wedding?,His fiancée Lila called off the wedding the night before due to panic. John still went to the church...,"ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,the-wedding-that-wasnt.txt,0.0,0,easy,0.0
+What was John's philosophy about tragedy throughout his life?,"He saw tragedy as life's way of reminding us that control is an illusion, the universe's way of edit...","ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,"the-absurd-adolescence-of-john-doe.txt, the-calm-storm-of-john-doe.txt, the-uninvited-guest.txt",0.0,0,hard,0.0
+What jobs did John have throughout his life?,"Junior assistant at Evergreen Public Library, cataloguing assistant at a private rare-book dealer, r...","ERROR: The following component failed to run:
+Component name: 'retriever'
+Component type: 'ChromaEmb...",,"the-library-of-small-disappointments.txt, the-last-book.txt, the-quiet-clockwork-of-john-doe.txt, the-ordinary-tuesday.txt",0.0,0,hard,0.0

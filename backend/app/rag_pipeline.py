@@ -125,7 +125,8 @@ class RAGPipeline:
         self.query_pipeline = Pipeline()
 
         retriever = ChromaEmbeddingRetriever(
-            document_store=self.document_store, top_k=self.config.pipeline.top_k
+            document_store=self.document_store,
+            top_k=self.config.pipeline.top_k,
         )
 
         template = """

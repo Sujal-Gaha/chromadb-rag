@@ -6,8 +6,6 @@ import json
 from datetime import datetime
 from typing import Optional
 
-from evaluation.v3.visualization.report_generator import ReportGenerator
-
 sys.path.insert(0, os.path.join(Path(__file__).parent.parent.parent))
 
 from app.rag_pipeline import RAGPipeline
@@ -18,6 +16,7 @@ from evaluation.v3.data.gold_data import (
 from evaluation.v3.pipeline.evaluation_pipeline import EvaluationPipeline
 from evaluation.v3.evaluators.answer_evaluator import AnswerEvaluator
 from evaluation.v3.evaluators.retrieval_evaluator import RetrievalEvaluator
+from evaluation.v3.evaluators.retrieval_evaluator_v2 import RetrievalEvaluatorV2
 from evaluation.v3.evaluators.performance_evaluator import PerformanceEvaluator
 from evaluation.v3.visualization.visualizer import EvaluationVisualizer
 
@@ -31,7 +30,6 @@ async def run_evaluation(
     batch_size=3,
     output_dir="evaluation_results/v3",
     create_visualizations=True,
-    create_reports=True,
     save_results=True,
 ):
     log.debug("=" * 70)
@@ -47,11 +45,14 @@ async def run_evaluation(
 
     log.debug("Registering evaluators...")
 
-    answer_evaluator = AnswerEvaluator({"similarity_model": "all-MiniLM-L6-v2"})
+    answer_evaluator = AnswerEvaluator()
     eval_pipeline.register_evaluator(answer_evaluator)
 
-    retrieval_evaluator = RetrievalEvaluator({"relevance_threshold": 0.7})
-    eval_pipeline.register_evaluator(retrieval_evaluator)
+    # retrieval_evaluator = RetrievalEvaluator({"relevance_threshold": 0.7})
+    # eval_pipeline.register_evaluator(retrieval_evaluator)
+
+    retrieval_evaluator_v2 = RetrievalEvaluatorV2({"relevance_threshold": 0.7})
+    eval_pipeline.register_evaluator(retrieval_evaluator_v2)
 
     performance_evaluator = PerformanceEvaluator({"target_response_time": 2.0})
     eval_pipeline.register_evaluator(performance_evaluator)
@@ -98,7 +99,6 @@ async def run_evaluation(
         for difficulty, count in summary["difficulty_breakdown"].items():
             log.info(f"  {difficulty}: {count}")
 
-    html_path = None
     viz_files = {}
 
     if save_results:
@@ -131,20 +131,6 @@ async def run_evaluation(
             for viz_name, viz_path in viz_files.items():
                 log.info(f"{viz_name}: {viz_path}")
 
-        if create_reports:
-            log.info("Generating reports...")
-            reporter = ReportGenerator(output_dir=str(output_path / "reports"))
-
-            html_path = reporter.generate_html_report(
-                batch_eval=batch_result, visualizations=viz_files
-            )
-            log.info(f"HTML Report saved to: {html_path}")
-
-            md_path = reporter.generate_markdown_report(
-                batch_eval=batch_result, visualizations=viz_files
-            )
-            log.info(f"Markdown Report saved to: {md_path}")
-
         batch_json_path = output_path / f"batch_result_{timestamp}.json"
         with open(batch_json_path, "w") as f:
             json.dump(batch_result.to_dict(), f, indent=2, default=str)
@@ -156,7 +142,7 @@ async def run_evaluation(
     log.info("Evaluation completed successfully!")
     log.info("=" * 70)
 
-    return batch_result, summary, html_path
+    return batch_result, summary
 
 
 async def evaluate_single_question(

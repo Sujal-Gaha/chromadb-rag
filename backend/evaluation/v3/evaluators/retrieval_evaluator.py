@@ -22,7 +22,7 @@ log = getLogger(__name__)
 class RetrievalEvaluator(BaseEvaluator):
     def __init__(self, config: Optional[dict[str, Any]] = None):
         super().__init__("RetrievalEvaluator", config or {})
-        self.evaluate_type = EvaluationType.RETRIEVAL
+        self.evaluation_type = EvaluationType.RETRIEVAL
 
         # Haystack's built-in evaluators
         # These expect specific document formats
@@ -94,10 +94,8 @@ class RetrievalEvaluator(BaseEvaluator):
         retrieved_files: list[str]
 
         if retrieved_docs and isinstance(retrieved_docs[0], Document):
-            # Already Document objects from RAG pipeline
             retrieved_haystack_docs = retrieved_docs  # type: ignore
 
-            # Extract filenames using our improved logic
             retrieved_files = [
                 self._extract_original_filename(doc) for doc in retrieved_haystack_docs
             ]
@@ -122,7 +120,7 @@ class RetrievalEvaluator(BaseEvaluator):
                 log.debug(f"Content: {doc.content[:100] if doc.content else ''}...")
                 log.debug(f"Meta: {doc.meta}")
 
-            log.debug("\nRETRIEVED DOCUMENTS:")
+            log.debug("RETRIEVED DOCUMENTS:")
             for i, doc in enumerate(retrieved_haystack_docs):
                 log.debug(f"Ret Doc {i}:")
                 log.debug(f"Content: {doc.content[:100] if doc.content else ''}...")
