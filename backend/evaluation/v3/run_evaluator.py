@@ -16,7 +16,6 @@ from evaluation.v3.data.gold_data import (
 from evaluation.v3.pipeline.evaluation_pipeline import EvaluationPipeline
 from evaluation.v3.evaluators.answer_evaluator import AnswerEvaluator
 from evaluation.v3.evaluators.retrieval_evaluator import RetrievalEvaluator
-from evaluation.v3.evaluators.retrieval_evaluator_v2 import RetrievalEvaluatorV2
 from evaluation.v3.evaluators.performance_evaluator import PerformanceEvaluator
 from evaluation.v3.visualization.visualizer import EvaluationVisualizer
 
@@ -51,11 +50,8 @@ async def run_evaluation(
     answer_evaluator = AnswerEvaluator(config=config)
     eval_pipeline.register_evaluator(answer_evaluator)
 
-    # retrieval_evaluator = RetrievalEvaluator({"relevance_threshold": 0.7})
-    # eval_pipeline.register_evaluator(retrieval_evaluator)
-
-    retrieval_evaluator_v2 = RetrievalEvaluatorV2(config=config)
-    eval_pipeline.register_evaluator(retrieval_evaluator_v2)
+    retrieval_evaluator = RetrievalEvaluator(config=config)
+    eval_pipeline.register_evaluator(retrieval_evaluator)
 
     performance_evaluator = PerformanceEvaluator(config=config)
     eval_pipeline.register_evaluator(performance_evaluator)
