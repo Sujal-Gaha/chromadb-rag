@@ -21,8 +21,7 @@ class PerformanceEvaluator(BaseEvaluator):
 
         self.evaluation_type = EvaluationType.PERFORMANCE
 
-        # FIXME: put this in config
-        self.target_response_time = 2.0
+        self.target_response_time = self.config.pipeline.target_response_time
 
     async def evaluate_single(
         self,

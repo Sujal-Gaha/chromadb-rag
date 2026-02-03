@@ -34,13 +34,6 @@ class RetrievalEvaluator(BaseEvaluator):
         self.mrr_evaluator = DocumentMRREvaluator()
         self.recall_evaluator = DocumentRecallEvaluator()
 
-        # FIXME: put this in config
-        self.relevance_threshold = 0.7
-
-        log.info(
-            f"RetrievalEvaluator initialized with relevance_threshold: {self.relevance_threshold}"
-        )
-
     def _extract_original_filename(self, doc: Document) -> str:
         return (
             doc.meta.get("original_filename")

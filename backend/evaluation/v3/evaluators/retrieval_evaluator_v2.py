@@ -19,13 +19,7 @@ class RetrievalEvaluatorV2(BaseEvaluator):
 
         self.evaluation_type = EvaluationType.RETRIEVAL
 
-        # FIXME: put this in config
-        self.relevance_threshold = 0.7
-
         self.recall_at_ks = [3, 5, 10]
-        log.info(
-            f"RetrievalEvaluator initialized with relevance_threshold: {self.relevance_threshold}"
-        )
 
     def _extract_original_filename(self, item: Any) -> str:
         """Extract clean filename from Document or string"""

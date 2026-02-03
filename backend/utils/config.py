@@ -71,6 +71,7 @@ class PipelineConfig:
     top_k: int
     chunk_size: int
     chunk_overlap: int
+    target_response_time: float
 
     def validate(self) -> list[str]:
         errors = []
@@ -92,6 +93,11 @@ class PipelineConfig:
         if self.chunk_overlap >= self.chunk_size:
             errors.append(
                 f"CHUNK_OVERLAP ({self.chunk_overlap}) must be less than CHUNK_SIZE ({self.chunk_size})"
+            )
+
+        if self.target_response_time < 0.0:
+            errors.append(
+                f"TARGET_RESPONSE_TIME must be non-negative, got: {self.target_response_time}"
             )
 
         return errors
@@ -143,6 +149,7 @@ class Config:
             top_k=self._get_int_env("TOP_K", 8),
             chunk_size=self._get_int_env("CHUNK_SIZE", 500),
             chunk_overlap=self._get_int_env("CHUNK_OVERLAP", 100),
+            target_response_time=self._get_float_env("TARGET_RESPONSE_TIME", 2.0),
         )
 
         self.llm = LLMConfig(
