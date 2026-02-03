@@ -16,12 +16,16 @@ from evaluation.v3.base.evaluator_base import (
     EvaluationType,
 )
 
+from utils.config import Config
+
 log = getLogger(__name__)
 
 
 class RetrievalEvaluator(BaseEvaluator):
-    def __init__(self, config: Optional[dict[str, Any]] = None):
-        super().__init__("RetrievalEvaluator", config or {})
+    def __init__(self, config: Config):
+        self.config = config
+        super().__init__("RetrievalEvaluator", config=self.config)
+
         self.evaluation_type = EvaluationType.RETRIEVAL
 
         # Haystack's built-in evaluators
@@ -30,7 +34,8 @@ class RetrievalEvaluator(BaseEvaluator):
         self.mrr_evaluator = DocumentMRREvaluator()
         self.recall_evaluator = DocumentRecallEvaluator()
 
-        self.relevance_threshold = self.config.get("relevance_threshold", 0.7)
+        # FIXME: put this in config
+        self.relevance_threshold = 0.7
 
         log.info(
             f"RetrievalEvaluator initialized with relevance_threshold: {self.relevance_threshold}"

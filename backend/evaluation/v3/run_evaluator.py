@@ -21,6 +21,7 @@ from evaluation.v3.evaluators.performance_evaluator import PerformanceEvaluator
 from evaluation.v3.visualization.visualizer import EvaluationVisualizer
 
 from utils.logger import get_logger
+from utils.config import get_config
 
 log = get_logger(__name__)
 
@@ -45,16 +46,18 @@ async def run_evaluation(
 
     log.debug("Registering evaluators...")
 
-    answer_evaluator = AnswerEvaluator()
+    config = get_config()
+
+    answer_evaluator = AnswerEvaluator(config=config)
     eval_pipeline.register_evaluator(answer_evaluator)
 
     # retrieval_evaluator = RetrievalEvaluator({"relevance_threshold": 0.7})
     # eval_pipeline.register_evaluator(retrieval_evaluator)
 
-    retrieval_evaluator_v2 = RetrievalEvaluatorV2({"relevance_threshold": 0.7})
+    retrieval_evaluator_v2 = RetrievalEvaluatorV2(config=config)
     eval_pipeline.register_evaluator(retrieval_evaluator_v2)
 
-    performance_evaluator = PerformanceEvaluator({"target_response_time": 2.0})
+    performance_evaluator = PerformanceEvaluator(config=config)
     eval_pipeline.register_evaluator(performance_evaluator)
 
     log.info(f"Registered {len(eval_pipeline.evaluators)} evaluators")
@@ -151,9 +154,11 @@ async def evaluate_single_question(
     rag_pipeline = RAGPipeline()
     rag_pipeline.initialize()
 
+    config = get_config()
+
     eval_pipeline = EvaluationPipeline(rag_pipeline)
 
-    eval_pipeline.register_evaluator(AnswerEvaluator())
+    eval_pipeline.register_evaluator(AnswerEvaluator(config=config))
 
     result = await eval_pipeline.evaluate_single(
         question=question,

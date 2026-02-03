@@ -2,7 +2,6 @@ import difflib
 
 from typing import Any, Optional, Union
 
-
 from haystack import Document
 from haystack.logging import getLogger
 from evaluation.v3.base.evaluator_base import (
@@ -11,17 +10,45 @@ from evaluation.v3.base.evaluator_base import (
     EvaluationType,
 )
 
-from haystack.components.evaluators import AnswerExactMatchEvaluator
+from haystack.components.evaluators import (
+    AnswerExactMatchEvaluator,
+    FaithfulnessEvaluator,
+    SASEvaluator,
+)
+
+from haystack_integrations.components.generators.ollama import (
+    OllamaChatGenerator,
+)
+
+from utils.config import Config
 
 log = getLogger(__name__)
 
 
 class AnswerEvaluator(BaseEvaluator):
-    def __init__(self, config: Optional[dict[str, Any]] = None):
-        super().__init__("AnswerEvaluator", config or {})
+    def __init__(self, config: Config):
+        self.config = config
+        super().__init__("AnswerEvaluator", config=self.config)
+
         self.evaluation_type = EvaluationType.ANSWER_QUALITY
 
         self.exact_match_evaluator = AnswerExactMatchEvaluator()
+
+        self.sas_evaluator = SASEvaluator(
+            model="sentence-transformers/all-MiniLM-L6-v2"
+        )
+
+        judge = OllamaChatGenerator(
+            model="gpt-oss:20b",
+            url=self.config.ollama.server_url,
+            timeout=300,
+            generation_kwargs={
+                "temperature": 0.0,  # low for consistent juding
+                "num_ctx": 8192,
+            },
+        )
+
+        self.faithfulness_evaluator = FaithfulnessEvaluator(chat_generator=judge)
 
     async def evaluate_single(
         self,
@@ -101,6 +128,51 @@ class AnswerEvaluator(BaseEvaluator):
             )
         )
 
+        sas_result = self.sas_evaluator.run(
+            ground_truth_answers=[expected_answer], predicted_answers=[generated_answer]
+        )
+        sas_score = sas_result.get("score", 0.0)
+        results.append(
+            EvaluationResult(
+                evaluator_type=self.name,
+                metric_name="semantic_similarity",
+                value=sas_score,
+                confidence=0.95,
+                metadata={"method": "SASEvaluator"},
+            )
+        )
+
+        contexts = [
+            doc.content if isinstance(doc, Document) else str(doc)
+            for doc in retrieved_docs
+        ]
+
+        if not contexts:
+            contexts = [""]
+
+        faithfulness_score = 0.0
+        try:
+            faithfulness_result = self.faithfulness_evaluator.run(
+                questions=[question],
+                contexts=[contexts],
+                predicted_answers=[generated_answer],
+            )
+            faithfulness_score = faithfulness_result.get("score", 0.0)
+        except Exception as e:
+            log.warning(f"Faithfulness evaluation failed: {e}, skipping...")
+            faithfulness_score = 0.0  # or 0.0
+
+        if faithfulness_score is not None:
+            results.append(
+                EvaluationResult(
+                    evaluator_type=self.name,
+                    metric_name="faithfulness",
+                    value=faithfulness_score,
+                    confidence=0.90,
+                    metadata={"judge_model": "gpt-oss:20b"},
+                )
+            )
+
         return results
 
     def _calculate_sequence_similarity(self, reference: str, candidate: str) -> float:
@@ -145,15 +217,13 @@ class AnswerEvaluator(BaseEvaluator):
                 return 0.0
 
             ref_lower = reference.lower()
-            cand_lower = reference.lower()
+            cand_lower = candidate.lower()
 
             ref_words = [w for w in ref_lower.split() if len(w) > 3]
-
             if not ref_words:
                 return 0.0
 
             matches = sum(1 for word in ref_words if word in cand_lower)
-
             return matches / len(ref_words)
 
         except Exception as e:
@@ -161,4 +231,5 @@ class AnswerEvaluator(BaseEvaluator):
             return 0.0
 
     def cleanup(self):
+        log.debug("Cleaning up AnswerEvaluator resources")
         pass

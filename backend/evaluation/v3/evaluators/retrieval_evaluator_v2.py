@@ -7,15 +7,21 @@ from evaluation.v3.base.evaluator_base import (
     EvaluationResult,
     EvaluationType,
 )
+from utils.config import Config
 
 log = getLogger(__name__)
 
 
 class RetrievalEvaluatorV2(BaseEvaluator):
-    def __init__(self, config: Optional[dict[str, Any]] = None):
-        super().__init__("RetrievalEvaluator", config or {})
+    def __init__(self, config: Config):
+        self.config = config
+        super().__init__("RetrievalEvaluator", config=self.config)
+
         self.evaluation_type = EvaluationType.RETRIEVAL
-        self.relevance_threshold = self.config.get("relevance_threshold", 0.7)
+
+        # FIXME: put this in config
+        self.relevance_threshold = 0.7
+
         self.recall_at_ks = [3, 5, 10]
         log.info(
             f"RetrievalEvaluator initialized with relevance_threshold: {self.relevance_threshold}"
@@ -198,5 +204,5 @@ class RetrievalEvaluatorV2(BaseEvaluator):
         return relevant_count / len(top_k)
 
     def cleanup(self):
-        log.debug("Cleaning up RetrievalEvaluator resources")
+        log.debug("Cleaning up RetrievalEvaluatorV2 resources")
         pass

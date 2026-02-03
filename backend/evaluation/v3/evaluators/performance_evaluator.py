@@ -8,13 +8,21 @@ from evaluation.v3.base.evaluator_base import (
     EvaluationType,
 )
 
+from utils.config import Config
+from utils.logger import get_logger
+
+log = get_logger(__name__)
+
 
 class PerformanceEvaluator(BaseEvaluator):
-    def __init__(self, config: Optional[dict[str, Any]] = None):
-        super().__init__("PerformanceEvaluator", config or {})
+    def __init__(self, config: Config):
+        self.config = config
+        super().__init__("PerformanceEvaluator", config=self.config)
+
         self.evaluation_type = EvaluationType.PERFORMANCE
 
-        self.target_response_time = self.config.get("target_response_time", 2.0)
+        # FIXME: put this in config
+        self.target_response_time = 2.0
 
     async def evaluate_single(
         self,
@@ -80,4 +88,5 @@ class PerformanceEvaluator(BaseEvaluator):
         return results
 
     def cleanup(self):
+        log.debug("Cleaning up PerformanceEvaluator resources")
         pass

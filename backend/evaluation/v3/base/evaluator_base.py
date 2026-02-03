@@ -5,6 +5,8 @@ from typing import Any, Optional, Union
 
 from haystack import Document
 
+from utils.config import Config
+
 
 class EvaluationType(Enum):
     """Types of evaluations supported"""
@@ -68,7 +70,7 @@ class BatchResult:
 class BaseEvaluator(ABC):
     """Abstract base class for all evaluators"""
 
-    def __init__(self, name: str, config: Optional[dict[str, Any]] = None) -> None:
+    def __init__(self, name: str, config: Config) -> None:
         self.name = name
         self.config = config or {}
         self.evaluation_type = EvaluationType.CUSTOM

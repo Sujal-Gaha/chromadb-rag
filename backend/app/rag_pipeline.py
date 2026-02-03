@@ -25,8 +25,8 @@ from haystack_integrations.components.embedders.ollama import (
     OllamaTextEmbedder,
 )
 
-from .config import get_config
 from utils.logger import get_logger
+from utils.config import get_config
 
 log = get_logger(__name__)
 
