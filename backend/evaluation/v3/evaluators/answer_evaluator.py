@@ -1,6 +1,9 @@
 import difflib
+import numpy as np
 
 from typing import Any, Optional, Union
+
+from sklearn.metrics.pairwise import cosine_similarity
 
 from haystack import Document
 from haystack.logging import getLogger
@@ -9,16 +12,14 @@ from evaluation.v3.base.evaluator_base import (
     EvaluationResult,
     EvaluationType,
 )
-
 from haystack.components.evaluators import (
     AnswerExactMatchEvaluator,
     FaithfulnessEvaluator,
-    SASEvaluator,
 )
-
 from haystack_integrations.components.generators.ollama import (
     OllamaChatGenerator,
 )
+from haystack_integrations.components.embedders.ollama import OllamaTextEmbedder
 
 from utils.config import Config
 
@@ -34,8 +35,13 @@ class AnswerEvaluator(BaseEvaluator):
 
         self.exact_match_evaluator = AnswerExactMatchEvaluator()
 
-        self.sas_evaluator = SASEvaluator(
-            model="sentence-transformers/all-MiniLM-L6-v2"
+        self.embedder = OllamaTextEmbedder(
+            model=self.config.ollama.embedding_model,
+            url=self.config.ollama.server_url,
+            timeout=self.config.ollama.timeout,
+            generation_kwargs={
+                "temperature": 0.0,
+            },
         )
 
         judge = OllamaChatGenerator(
@@ -128,17 +134,33 @@ class AnswerEvaluator(BaseEvaluator):
             )
         )
 
-        sas_result = self.sas_evaluator.run(
-            ground_truth_answers=[expected_answer], predicted_answers=[generated_answer]
-        )
-        sas_score = sas_result.get("score", 0.0)
+        sas_score = 0.0
+        try:
+            expected_result = self.embedder.run(text=expected_answer)
+            expected_embedding = expected_result["embedding"]
+
+            generated_result = self.embedder.run(text=generated_answer)
+            generated_embedding = generated_result["embedding"]
+
+            expected_array = np.array([expected_embedding])
+            generated_array = np.array([generated_embedding])
+
+            sas_score = cosine_similarity(expected_array, generated_array)[0][0]
+
+        except Exception as e:
+            log.error(f"Semantic similarity evaluation failed: {e}, defaulting to 0.0")
+            sas_score = 0.0
+
         results.append(
             EvaluationResult(
                 evaluator_type=self.name,
                 metric_name="semantic_similarity",
                 value=sas_score,
                 confidence=0.95,
-                metadata={"method": "SASEvaluator"},
+                metadata={
+                    "method": "OllamaEmbedder",
+                    "model": self.config.ollama.embedding_model,
+                },
             )
         )
 
