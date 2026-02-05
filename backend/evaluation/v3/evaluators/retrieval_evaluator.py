@@ -149,18 +149,18 @@ class RetrievalEvaluator(BaseEvaluator):
         log.info(
             f"Context Match (any rank) : {context_match:.4f}  ({len(matched_files)}/{len(expected_set)})"
         )
-        log.info(f"MRR                       : {mrr:.4f}")
+        log.info(f"MRR                      : {mrr:.4f}")
         for k in self.recall_at_ks:
             recall_k = next(
                 r.value for r in results if r.metric_name == f"recall_at_{k}"
             )
-            log.info(f"Recall@{k:2d}               : {recall_k:.4f}")
+            log.info(f"Recall@{k:2d}                : {recall_k:.4f}")
         log.info(
             f"Precision@{self.config.pipeline.top_k}              : {precision_k:.4f}"
         )
         if matched_files:
-            log.info(f"Matched files             : {sorted(matched_files)}")
-        log.info("=" * 60)
+            log.info(f"Matched files            : {sorted(matched_files)}")
+        log.info("=" * 80)
 
         return results
 

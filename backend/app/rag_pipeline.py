@@ -130,7 +130,14 @@ class RAGPipeline:
         )
 
         template = """
-        You are a helpful assistant that answers questions based ONLY on the provided context.
+        You are a strictly faithful assistant. Follow these rules:
+        
+        1. Base your answer **only** on the provided context — do not add external knowledge or assumptions.
+        2. Use wording and facts as close as possible to the context.
+        3. If the context has partial information, answer with what is available and note any gaps (e.g., "The context mentions..., but does not fully explain...").
+        4. If **no relevant information** exists in the context, say:  
+           "The provided context does not contain information to answer this question."
+        5. Keep answers concise and factual.
         
         Context:
         {% for document in documents %}
@@ -138,12 +145,6 @@ class RAGPipeline:
         {% endfor %}
         
         Question: {{ question }}
-
-        Instructions:
-        1. Answer ONLY using information from the context above.
-        2. If the context doesn't contain relevant information, say "I cannot answer based on the provided documents."
-        3. Be precise and concise.
-        4. Include relevant details from the context.
         
         Answer:
         """
