@@ -130,14 +130,14 @@ class RetrievalEvaluator(BaseEvaluator):
                 )
             )
 
-        precision_10 = self._calculate_precision_at_k(
-            retrieved_files, expected_set, k=10
+        precision_k = self._calculate_precision_at_k(
+            retrieved_files, expected_set, k=self.config.pipeline.top_k
         )
         results.append(
             EvaluationResult(
                 evaluator_type=self.name,
-                metric_name="precision_at_10",
-                value=precision_10,
+                metric_name=f"precision_at_{self.config.pipeline.top_k}",
+                value=precision_k,
                 confidence=0.85,
             )
         )
@@ -155,7 +155,9 @@ class RetrievalEvaluator(BaseEvaluator):
                 r.value for r in results if r.metric_name == f"recall_at_{k}"
             )
             log.info(f"Recall@{k:2d}               : {recall_k:.4f}")
-        log.info(f"Precision@10              : {precision_10:.4f}")
+        log.info(
+            f"Precision@{self.config.pipeline.top_k}              : {precision_k:.4f}"
+        )
         if matched_files:
             log.info(f"Matched files             : {sorted(matched_files)}")
         log.info("=" * 60)

@@ -333,7 +333,7 @@ class EvaluationPipeline:
         )
         self.metrics_store.record_evaluation(batch_result)
 
-        self._export_results(batch_result, batch_id)
+        # self._export_results(batch_result, batch_id)
 
         log.info("=" * 70)
         log.info(f"Evaluation completed in {total_duration:.1f} seconds")

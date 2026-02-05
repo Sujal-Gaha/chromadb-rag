@@ -101,7 +101,7 @@ async def run_evaluation(
     viz_files = {}
 
     if save_results:
-        output_path = Path(output_dir)
+        output_path = Path(output_dir).resolve()
         output_path.mkdir(parents=True, exist_ok=True)
 
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -116,6 +116,11 @@ async def run_evaluation(
             json.dump(summary, f, indent=2, default=str)
         log.info(f"Summary saved to: {json_path}")
 
+        batch_json_path = output_path / f"batch_result_{timestamp}.json"
+        with open(batch_json_path, "w") as f:
+            json.dump(batch_result.to_dict(), f, indent=2, default=str)
+        log.info(f"Batch result saved to: {batch_json_path}")
+
         if create_visualizations and len(df) > 0:
             log.info("Creating visualizations...")
             visualizer = EvaluationVisualizer(dpi=120)
@@ -129,10 +134,6 @@ async def run_evaluation(
             log.info(f"Created {len(viz_files)} visualizations")
             for viz_name, viz_path in viz_files.items():
                 log.info(f"{viz_name}: {viz_path}")
-
-        batch_json_path = output_path / f"batch_result_{timestamp}.json"
-        with open(batch_json_path, "w") as f:
-            json.dump(batch_result.to_dict(), f, indent=2, default=str)
 
     log.info("Cleaning up...")
     eval_pipeline.cleanup()

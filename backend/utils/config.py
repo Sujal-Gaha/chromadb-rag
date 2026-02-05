@@ -12,6 +12,7 @@ load_dotenv()
 class OllamaConfig:
     server_url: str
     model: str
+    judge_model: str
     embedding_model: str
     timeout: int = 120
 
@@ -27,6 +28,9 @@ class OllamaConfig:
 
         if not self.model:
             errors.append("OLLAMA_MODEL is not set")
+
+        if not self.judge_model:
+            errors.append("OLLAMA_JUDGE_MODEL is not set")
 
         if not self.embedding_model:
             errors.append("OLLAMA_EMBEDDING_MODEL is not set")
@@ -83,8 +87,8 @@ class PipelineConfig:
 
         if self.chunk_size <= 0:
             errors.append(f"CHUNK_SIZE must be positive, got: {self.chunk_size}")
-        if self.chunk_size > 1000:
-            errors.append(f"CHUNK_SIZE too large (max 1000), got: {self.chunk_size}")
+        if self.chunk_size > 1500:
+            errors.append(f"CHUNK_SIZE too large (max 1500), got: {self.chunk_size}")
 
         if self.chunk_overlap < 0:
             errors.append(
@@ -135,6 +139,7 @@ class Config:
         self.ollama = OllamaConfig(
             server_url=os.getenv("OLLAMA_SERVER_URL", "http://ollama:11434"),
             model=os.getenv("OLLAMA_MODEL", "llama3.2"),
+            judge_model=os.getenv("OLLAMA_JUDGE_MODEL", "llama3.1:8b"),
             embedding_model=os.getenv("OLLAMA_EMBEDDING_MODEL", "nomic-embed-text"),
             timeout=self._get_int_env("OLLAMA_TIMEOUT", 120),
         )
@@ -231,6 +236,7 @@ class Config:
         logger.info("Ollama Configuration:")
         logger.info(f"  Server URL: {self.ollama.server_url}")
         logger.info(f"  LLM Model: {self.ollama.model}")
+        logger.info(f"  LLM Judge Model: {self.ollama.judge_model}")
         logger.info(f"  Embedding Model: {self.ollama.embedding_model}")
         logger.info(f"  Timeout: {self.ollama.timeout}s")
         logger.info("")

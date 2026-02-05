@@ -58,11 +58,13 @@ class PerformanceEvaluator(BaseEvaluator):
         else:
             efficiency = 0.0
 
+        retrieval_waste_score = 1 - efficiency
+
         results.append(
             EvaluationResult(
                 evaluator_type=self.name,
-                metric_name="retrieval_efficiency",
-                value=efficiency,
+                metric_name="retrieval_waste",
+                value=retrieval_waste_score,
                 confidence=0.0,
                 metadata={
                     "retrieved_count": retrieval_count,

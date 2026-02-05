@@ -45,12 +45,13 @@ class AnswerEvaluator(BaseEvaluator):
         )
 
         judge = OllamaChatGenerator(
-            model="gpt-oss:20b",
+            model=self.config.ollama.judge_model,
             url=self.config.ollama.server_url,
             timeout=300,
             generation_kwargs={
-                "temperature": 0.0,  # low for consistent juding
+                "temperature": 0.0,  # low for consistent judging
                 "num_ctx": 8192,
+                "format": "json",
             },
         )
 
@@ -191,7 +192,7 @@ class AnswerEvaluator(BaseEvaluator):
                     metric_name="faithfulness",
                     value=faithfulness_score,
                     confidence=0.90,
-                    metadata={"judge_model": "gpt-oss:20b"},
+                    metadata={"judge_model": "llama3.1:8b"},
                 )
             )
 
