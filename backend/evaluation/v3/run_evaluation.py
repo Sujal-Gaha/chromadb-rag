@@ -63,7 +63,7 @@ async def run_evaluation(
 
     log.debug("Initializing filename mapping...")
     for item in gold_data_to_use:
-        for doc in item.get("expected_context", []):
+        for doc in item.expected_context:
             log.info(f"Expected document: {doc}")
 
     def progress_callback(progress, completed, total):
@@ -161,6 +161,7 @@ async def evaluate_single_question(
         question=question,
         expected_answer=expected_answer,
         expected_docs=expected_docs or [],
+        difficulty="easy",
     )
 
     log.info(f"Question: {question}")

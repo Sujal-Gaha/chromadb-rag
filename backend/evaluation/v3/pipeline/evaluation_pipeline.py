@@ -13,7 +13,7 @@ from evaluation.v3.base.evaluator_base import (
     QuestionResult,
 )
 from evaluation.v3.base.metrics_store import MetricsStore
-from evaluation.v3.data.gold_data import DOCUMENT_CONTENTS
+from evaluation.v3.data.gold_data import DOCUMENT_CONTENTS, Difficulty, GoldData
 import pandas as pd
 
 log = getLogger(__name__)
@@ -113,7 +113,7 @@ class EvaluationPipeline:
         question: str,
         expected_answer: str,
         expected_docs: list[str],
-        difficulty: str = "medium",
+        difficulty: Difficulty,
         question_metadata: Optional[dict[str, Any]] = None,
     ) -> QuestionResult:
         retries = 0
@@ -124,7 +124,6 @@ class EvaluationPipeline:
                 generated_answer = rag_result.get("reply", "")
                 sources = rag_result.get("sources", [])
                 retrieved_docs = []
-                retrieved_filenames = []
                 for source in sources:
                     filename = source.get("filename", "")
                     if filename:
@@ -254,7 +253,7 @@ class EvaluationPipeline:
 
     async def evaluate_batch(
         self,
-        gold_data: list[dict[str, Any]],
+        gold_data: list[GoldData],
         batch_size: int = 3,
         progress_callback=None,
     ) -> BatchResult:
@@ -269,7 +268,7 @@ class EvaluationPipeline:
         log.info("=" * 70)
 
         for item in gold_data:
-            if "question" not in item or "expected_answer" not in item:
+            if not item.question or not item.expected_answer:
                 raise ValueError(
                     f"Invalid gold data entry: Missing 'question' or 'expected_answer' - {item}"
                 )
@@ -290,11 +289,11 @@ class EvaluationPipeline:
             batch_tasks = [
                 sem_task(
                     self.evaluate_single(
-                        question=item["question"],
-                        expected_answer=item["expected_answer"],
-                        expected_docs=item.get("expected_context", []),
-                        difficulty=item.get("difficulty", "medium"),
-                        question_metadata=item.get("metadata", {}),
+                        question=item.question,
+                        expected_answer=item.expected_answer,
+                        expected_docs=item.expected_context,
+                        difficulty=item.difficulty,
+                        question_metadata={},
                     )
                 )
                 for item in current_batch
