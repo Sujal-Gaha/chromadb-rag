@@ -1,0 +1,2482 @@
+{
+  "batch_id": "batch_20260206_074146",
+  "timestamp": "2026-02-06T07:41:46.225788",
+  "pipeline_version": "1.0",
+  "questions": [
+    {
+      "question": "What happened in the school bus accident when John was a teenager?",
+      "expected_answer": "The school bus skidded on wet pavement and collided with a fallen tree. John's best friend Tommy suffered a broken arm and the bus driver was hospitalized. John emerged unscathed but philosophically unaffected.",
+      "generated_answer": "In the accident, the school bus skidded on wet pavement and struck a fallen tree. The collision caused screams, shattered glass, and a smell of burnt rubber. John Doe was unharmed, but his best friend Tommy suffered a broken arm and the bus driver was hospitalized.",
+      "retrieved_docs": [
+        "the-absurd-adolescence-of-john-doe.txt",
+        "the-wedding-that-wasnt.txt",
+        "the-ordinary-tuesday.txt",
+        "the-calm-storm-of-john-doe.txt",
+        "the-last-book.txt"
+      ],
+      "expected_docs": [
+        "the-absurd-adolescence-of-john-doe.txt"
+      ],
+      "response_time": 26.630181312561035,
+      "retrieval_count": 5,
+      "difficulty": "easy",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.1936842105263158,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.5,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 1.393939393939394,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.65,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.8238973617767636,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-absurd-adolescence-of-john-doe.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 1.0,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 1
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 26.630181312561035
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "How did John react to the school bus accident compared to others?",
+      "expected_answer": "While others were shaken and counselors offered group hugs, John reacted with philosophical detachment. He saw it as 'the universe playing bumper cars with reality' and started a 'Bus Philosophy Club' to discuss existentialism.",
+      "generated_answer": "John reacted with calm, philosophical detachment. While parents hovered like anxious helicopters, counselors offered group hugs, and many people replayed the horror in whispers, John simply sat on the curb, shrugged off the paramedic\u2019s question, and mused that the accident was \u201cjust the universe playing bumper cars with reality.\u201d He remained unruffled and reflective, in contrast to the anxious, emotional reactions of others.",
+      "retrieved_docs": [
+        "the-absurd-adolescence-of-john-doe.txt",
+        "the-wedding-that-wasnt.txt",
+        "the-ordinary-tuesday.txt",
+        "the-calm-storm-of-john-doe.txt",
+        "the-quiet-clockwork-of-john-doe.txt"
+      ],
+      "expected_docs": [
+        "the-absurd-adolescence-of-john-doe.txt"
+      ],
+      "response_time": 27.64564847946167,
+      "retrieval_count": 5,
+      "difficulty": "medium",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.15572519083969466,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.25,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 1.8529411764705883,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.6153846153846154,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.7112951646239936,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.1111111111111111,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-absurd-adolescence-of-john-doe.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 1.0,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 1
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 27.64564847946167
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "What caused the fire that destroyed John's house?",
+      "expected_answer": "The fire was caused by a faulty wire in one of his beloved antique clocks.",
+      "generated_answer": "The fire was caused by a faulty wire in one of John\u2019s antique clocks.",
+      "retrieved_docs": [
+        "the-calm-storm-of-john-doe.txt",
+        "the-wedding-that-wasnt.txt",
+        "the-ordinary-tuesday.txt",
+        "the-last-book.txt",
+        "the-library-of-small-disappointments.txt"
+      ],
+      "expected_docs": [
+        "the-calm-storm-of-john-doe.txt"
+      ],
+      "response_time": 20.072267532348633,
+      "retrieval_count": 5,
+      "difficulty": "easy",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.9090909090909091,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.8125,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 0.9333333333333333,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.8571428571428571,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.9272549005173862,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-calm-storm-of-john-doe.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 1.0,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 1
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 20.072267532348633
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "How did John react when his house burned down?",
+      "expected_answer": "He remained calm and philosophical, saying 'it seems the house has decided to retire early' and noting 'Fire sales are literal.' He wasn't distraught and rebuilt his life with 'absurd deliberation.'",
+      "generated_answer": "John reacted calmly and non\u2011chalantly. He stood with his hands in his pockets, watched the smoke, and remarked that the house had \u201cdecided to retire early.\u201d He pulled out a small notebook, jotted a note (\u201cFire sales are literal\u201d), and expressed no visible distress, simply observing the ruins with a detached, stoic tone.",
+      "retrieved_docs": [
+        "the-calm-storm-of-john-doe.txt",
+        "the-wedding-that-wasnt.txt",
+        "the-ordinary-tuesday.txt",
+        "the-library-of-small-disappointments.txt",
+        "the-last-book.txt"
+      ],
+      "expected_docs": [
+        "the-calm-storm-of-john-doe.txt"
+      ],
+      "response_time": 32.48356246948242,
+      "retrieval_count": 5,
+      "difficulty": "medium",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.038535645472061654,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.16129032258064516,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 1.7096774193548387,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.3,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.8130802191231116,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-calm-storm-of-john-doe.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 1.0,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 1
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 32.48356246948242
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "Why did the university archive close and what book was John packing last?",
+      "expected_answer": "The university decided to digitize everything and close the physical stacks. The last book John packed was a 17th-century edition of Montaigne's Essays with the phrase 'Que s\u00e7ay-je?' (What do I know?).",
+      "generated_answer": "The archive closed because the university decided to digitize everything and shut the physical stacks.  \nJohn was packing a 17th\u2011century edition of Montaigne\u2019s *Essays* as the last book.",
+      "retrieved_docs": [
+        "the-last-book.txt",
+        "the-wedding-that-wasnt.txt",
+        "the-library-of-small-disappointments.txt",
+        "the-uninvited-guest.txt",
+        "the-quiet-clockwork-of-john-doe.txt"
+      ],
+      "expected_docs": [
+        "the-last-book.txt"
+      ],
+      "response_time": 25.534570455551147,
+      "retrieval_count": 5,
+      "difficulty": "medium",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.7183462532299741,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.38461538461538464,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 0.875,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.5714285714285714,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.8345689403142805,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-last-book.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 1.0,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 1
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 25.534570455551147
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "What happened to John at the library when he was 21?",
+      "expected_answer": "He lost his job as a junior assistant due to budget cuts ('last in, first out'). Three positions were eliminated including his.",
+      "generated_answer": "At twenty\u2011one, John was called into the head librarian\u2019s office and told that his contract would not be renewed next semester\u2014he was being laid off.",
+      "retrieved_docs": [
+        "the-wedding-that-wasnt.txt",
+        "the-last-book.txt",
+        "the-library-of-small-disappointments.txt",
+        "the-ordinary-tuesday.txt",
+        "the-quiet-clockwork-of-john-doe.txt"
+      ],
+      "expected_docs": [
+        "the-library-of-small-disappointments.txt"
+      ],
+      "response_time": 27.853625297546387,
+      "retrieval_count": 5,
+      "difficulty": "easy",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.17454545454545456,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.022222222222222223,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 1.1363636363636365,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.0,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.6467283235952443,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-library-of-small-disappointments.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 0.3333333333333333,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 27.853625297546387
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "What jobs did John apply for after losing his library job?",
+      "expected_answer": "Night security at a self-storage facility, part-time barista at a shop that only served oat-milk lattes, and cataloguing assistant at a private rare-book dealer who required a handwritten essay on why dust is noble. He took the rare-book job.",
+      "generated_answer": "John applied for three positions:  \n1. Night security at a self\u2011storage facility.  \n2. Part\u2011time barista at a shop that served only oat\u2011milk lattes.  \n3. Cataloguing assistant at a private rare\u2011book dealer who required a handwritten essay on why dust is noble.",
+      "retrieved_docs": [
+        "the-library-of-small-disappointments.txt",
+        "the-wedding-that-wasnt.txt",
+        "the-last-book.txt",
+        "the-calm-storm-of-john-doe.txt",
+        "the-uninvited-guest.txt"
+      ],
+      "expected_docs": [
+        "the-library-of-small-disappointments.txt"
+      ],
+      "response_time": 27.67420744895935,
+      "retrieval_count": 5,
+      "difficulty": "hard",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.7689243027888446,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.46808510638297873,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 1.0512820512820513,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.64,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.8264255175728107,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-library-of-small-disappointments.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 1.0,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 1
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 27.67420744895935
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "What settlement notice did John receive when he was 53?",
+      "expected_answer": "A class-action settlement from a chemical plant that leaked into Evergreen's water supply years earlier. It offered modest compensation for potential long-term health effects.",
+      "generated_answer": "He received a notice of a class\u2011action settlement concerning a chemical plant upstream that had leaked into the river supplying Evergreen\u2019s water, offering modest compensation for potential long\u2011term health effects.",
+      "retrieved_docs": [
+        "the-ordinary-tuesday.txt",
+        "the-wedding-that-wasnt.txt",
+        "the-library-of-small-disappointments.txt",
+        "the-quiet-clockwork-of-john-doe.txt",
+        "the-last-book.txt"
+      ],
+      "expected_docs": [
+        "the-ordinary-tuesday.txt"
+      ],
+      "response_time": 32.775333881378174,
+      "retrieval_count": 5,
+      "difficulty": "medium",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.12307692307692308,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.34210526315789475,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 1.25,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.65,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.8906304581565531,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-ordinary-tuesday.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 1.0,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 1
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 32.775333881378174
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "What happened to John's sister Mara?",
+      "expected_answer": "She was diagnosed with an aggressive form of leukemia and given months to live. John traveled to be with her, read to her, and was present when she died three weeks later.",
+      "generated_answer": "Mara, John\u2019s older sister, died three weeks after her diagnosis with aggressive leukemia.",
+      "retrieved_docs": [
+        "the-wedding-that-wasnt.txt",
+        "the-quiet-clockwork-of-john-doe.txt",
+        "the-last-book.txt",
+        "the-ordinary-tuesday.txt",
+        "the-calm-storm-of-john-doe.txt"
+      ],
+      "expected_docs": [
+        "the-quiet-clockwork-of-john-doe.txt"
+      ],
+      "response_time": 20.180200576782227,
+      "retrieval_count": 5,
+      "difficulty": "medium",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.2692307692307692,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.15151515151515152,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 0.40625,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.4,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.7879391696682554,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-quiet-clockwork-of-john-doe.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 0.5,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 2
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 20.180200576782227
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "How did John handle his sister's death?",
+      "expected_answer": "He remained stoic, finished reading the paragraph he was on when she died, sat with her for a while, then added her hospital bracelet to his mementos box labeled 'Act III' and continued with life.",
+      "generated_answer": "John stayed with Mara in her hospital room, reading to her from philosophy books, making instant coffee, and simply sitting while the IV drip ticked like a metronome. He remained calm, earning the nurses\u2019 nickname \u201cthe calm one\u201d and Mara\u2019s teasing \u201cthe infuriating one.\u201d After she died, he finished the paragraph he was reading, sat with her for a long time, and listened to the machines wind down. He returned to Evergreen, added her hospital bracelet to a small wooden box labeled \u201cAct\u202fIII,\u201d and carried on with his ordinary routine, carrying the weight of her loss like an umbrella.",
+      "retrieved_docs": [
+        "the-wedding-that-wasnt.txt",
+        "the-quiet-clockwork-of-john-doe.txt",
+        "the-uninvited-guest.txt",
+        "the-calm-storm-of-john-doe.txt",
+        "the-absurd-adolescence-of-john-doe.txt"
+      ],
+      "expected_docs": [
+        "the-quiet-clockwork-of-john-doe.txt"
+      ],
+      "response_time": 45.80261468887329,
+      "retrieval_count": 5,
+      "difficulty": "hard",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.04353393085787452,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.27058823529411763,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 2.0,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.55,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.7418649876396533,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-quiet-clockwork-of-john-doe.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 0.5,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 2
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 45.80261468887329
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "What was John's diagnosis at age 32 and how did he react?",
+      "expected_answer": "He was diagnosed with stage IV pancreatic cancer. He reacted with calm acceptance, asking only 'How long until the coffee stops tasting like coffee?' and continued his routines with minor adjustments.",
+      "generated_answer": "John Doe was diagnosed with **Stage\u202fIV pancreatic cancer** at age\u202f32.  \nHe listened quietly, nodded once, and asked only one question\u2014\u201cHow long until the coffee stops tasting like coffee?\u201d\u2014before leaving the office with a pamphlet titled *Living with Advanced Illness*. He did not quit his job or sell his belongings; instead he simply adjusted his routine and continued his work at the archive.",
+      "retrieved_docs": [
+        "the-uninvited-guest.txt",
+        "the-quiet-clockwork-of-john-doe.txt",
+        "the-wedding-that-wasnt.txt",
+        "the-ordinary-tuesday.txt",
+        "the-library-of-small-disappointments.txt"
+      ],
+      "expected_docs": [
+        "the-uninvited-guest.txt"
+      ],
+      "response_time": 34.40899848937988,
+      "retrieval_count": 5,
+      "difficulty": "medium",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.01680672268907563,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.265625,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 2.0,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.5833333333333334,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.8636956693617376,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-uninvited-guest.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 1.0,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 1
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 34.40899848937988
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "What were John's last requests?",
+      "expected_answer": "A fresh pot of terrible coffee and that someone finish cataloguing the unfinished boxes of uncatalogued letters in the archive basement.",
+      "generated_answer": "John\u2019s last requests were:\n\n1. A fresh pot of truly terrible coffee.  \n2. That someone finish cataloguing the unfinished boxes of uncatalogued letters in the archive basement.",
+      "retrieved_docs": [
+        "the-wedding-that-wasnt.txt",
+        "the-uninvited-guest.txt",
+        "the-last-book.txt",
+        "the-quiet-clockwork-of-john-doe.txt",
+        "the-ordinary-tuesday.txt"
+      ],
+      "expected_docs": [
+        "the-uninvited-guest.txt"
+      ],
+      "response_time": 35.00063228607178,
+      "retrieval_count": 5,
+      "difficulty": "hard",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.8553054662379421,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.6296296296296297,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 1.2857142857142858,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 1.0,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.7224528363528898,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-uninvited-guest.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 0.5,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 2
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 35.00063228607178
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "What happened at John's wedding?",
+      "expected_answer": "His fianc\u00e9e Lila called off the wedding the night before due to panic. John still went to the church, waited, then bought a pretzel and fed it to pigeons.",
+      "generated_answer": "John\u2019s wedding never took place. Lila called the night before and said she couldn\u2019t go, citing her own panic rather than any fault of John\u2019s. He arrived at St.\u202fAgnes Church, watched guests leave, sat in the front pew with a rose, and waited for a last\u2011minute change of heart. No one returned, so he left the church, met the street vendor, and moved on.",
+      "retrieved_docs": [
+        "the-wedding-that-wasnt.txt",
+        "the-ordinary-tuesday.txt",
+        "the-last-book.txt",
+        "the-quiet-clockwork-of-john-doe.txt",
+        "the-uninvited-guest.txt"
+      ],
+      "expected_docs": [
+        "the-wedding-that-wasnt.txt"
+      ],
+      "response_time": 35.9704315662384,
+      "retrieval_count": 5,
+      "difficulty": "easy",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.1225296442687747,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.125,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 2.0,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.4375,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.8167216819249585,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 1,
+            "expected_count": 1,
+            "matched_files": [
+              "the-wedding-that-wasnt.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 1.0,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 1
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.2,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 35.9704315662384
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.8,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 1
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "What was John's philosophy about tragedy throughout his life?",
+      "expected_answer": "He saw tragedy as life's way of reminding us that control is an illusion, the universe's way of editing the plot, or simply 'the universe playing bumper cars with reality.' He believed in accepting absurdity rather than fighting it.",
+      "generated_answer": "John\u2019s view of tragedy, as shown in every story, is that it is an inevitable, absurd part of life that should be met with calm observation rather than dramatic reaction. He treats it as a reminder of impermanence and the universe\u2019s \u201cediting\u201d of the plot, using humor and stoic acceptance to keep it from overwhelming him. In short, tragedy is seen as a natural, almost comic event to be acknowledged, not mourned, and carried on with a steady, unflappable attitude.",
+      "retrieved_docs": [
+        "the-wedding-that-wasnt.txt",
+        "the-absurd-adolescence-of-john-doe.txt",
+        "the-calm-storm-of-john-doe.txt",
+        "the-quiet-clockwork-of-john-doe.txt",
+        "the-uninvited-guest.txt"
+      ],
+      "expected_docs": [
+        "the-absurd-adolescence-of-john-doe.txt",
+        "the-calm-storm-of-john-doe.txt",
+        "the-uninvited-guest.txt"
+      ],
+      "response_time": 45.13911509513855,
+      "retrieval_count": 5,
+      "difficulty": "hard",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.043041606886657105,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.1566265060240964,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 2.0,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.34782608695652173,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.681967969274681,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 3,
+            "expected_count": 3,
+            "matched_files": [
+              "the-absurd-adolescence-of-john-doe.txt",
+              "the-calm-storm-of-john-doe.txt",
+              "the-uninvited-guest.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 0.5,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 2
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 0.6666666666666666,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 1.0,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.6,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 45.13911509513855
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.4,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 3
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    },
+    {
+      "question": "What jobs did John have throughout his life?",
+      "expected_answer": "Junior assistant at Evergreen Public Library, cataloguing assistant at a private rare-book dealer, rare book cataloguer at university archive, librarian, and eventually owner of a secondhand bookstore.",
+      "generated_answer": "**John Doe\u2019s jobs (as mentioned in the provided stories)**  \n\n1. **Junior assistant \u2013 Evergreen Public Library** (age\u202f21).  \n2. **Cataloguing assistant \u2013 private rare\u2011book dealer** (after the",
+      "retrieved_docs": [
+        "the-wedding-that-wasnt.txt",
+        "the-library-of-small-disappointments.txt",
+        "the-uninvited-guest.txt",
+        "the-quiet-clockwork-of-john-doe.txt",
+        "the-ordinary-tuesday.txt"
+      ],
+      "expected_docs": [
+        "the-library-of-small-disappointments.txt",
+        "the-last-book.txt",
+        "the-quiet-clockwork-of-john-doe.txt",
+        "the-ordinary-tuesday.txt"
+      ],
+      "response_time": 75.9752345085144,
+      "retrieval_count": 5,
+      "difficulty": "hard",
+      "evaluation_results": [
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "exact_match",
+          "value": 0.0,
+          "confidence": 1.0,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "sequence_similarity",
+          "value": 0.49489795918367346,
+          "confidence": 0.9,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "word_overlap",
+          "value": 0.09302325581395349,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "answer_length_ratio",
+          "value": 1.0,
+          "confidence": 0.8,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "keyword_match",
+          "value": 0.45,
+          "confidence": 0.7,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "semantic_similarity",
+          "value": 0.7858581808443628,
+          "confidence": 0.95,
+          "metadata": {
+            "method": "OllamaEmbedder",
+            "model": "qwen3-embedding:8b"
+          }
+        },
+        {
+          "evaluator_type": "AnswerEvaluator",
+          "metric_name": "faithfulness",
+          "value": 0.0,
+          "confidence": 0.9,
+          "metadata": {
+            "judge_model": "llama3.1:8b"
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "context_match",
+          "value": 0.75,
+          "confidence": 1.0,
+          "metadata": {
+            "matched_count": 3,
+            "expected_count": 4,
+            "matched_files": [
+              "the-library-of-small-disappointments.txt",
+              "the-ordinary-tuesday.txt",
+              "the-quiet-clockwork-of-john-doe.txt"
+            ]
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "mean_reciprocal_rank",
+          "value": 0.5,
+          "confidence": 0.95,
+          "metadata": {
+            "first_relevant_rank": 2
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_3",
+          "value": 0.25,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 3
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_5",
+          "value": 0.75,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 5
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "recall_at_10",
+          "value": 0.75,
+          "confidence": 0.9,
+          "metadata": {
+            "k": 10
+          }
+        },
+        {
+          "evaluator_type": "RetrievalEvaluator",
+          "metric_name": "precision_at_5",
+          "value": 0.6,
+          "confidence": 0.85,
+          "metadata": null
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "response_time_score",
+          "value": 0,
+          "confidence": 1.0,
+          "metadata": {
+            "actual_time": 75.9752345085144
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "retrieval_waste",
+          "value": 0.19999999999999996,
+          "confidence": 0.0,
+          "metadata": {
+            "retrieved_count": 5,
+            "expected_count": 4
+          }
+        },
+        {
+          "evaluator_type": "PerformanceEvaluator",
+          "metric_name": "answer_provided",
+          "value": 1.0,
+          "confidence": 1.0,
+          "metadata": null
+        }
+      ]
+    }
+  ],
+  "aggregated_metrics": {
+    "total_questions": 15,
+    "total_duration": 0,
+    "AnswerEvaluator_exact_match_mean": 0.0,
+    "AnswerEvaluator_exact_match_min": 0.0,
+    "AnswerEvaluator_exact_match_max": 0.0,
+    "AnswerEvaluator_exact_match_count": 15,
+    "AnswerEvaluator_sequence_similarity_mean": 0.32848499926166297,
+    "AnswerEvaluator_sequence_similarity_min": 0.01680672268907563,
+    "AnswerEvaluator_sequence_similarity_max": 0.9090909090909091,
+    "AnswerEvaluator_sequence_similarity_count": 15,
+    "AnswerEvaluator_word_overlap_mean": 0.3088550718157383,
+    "AnswerEvaluator_word_overlap_min": 0.022222222222222223,
+    "AnswerEvaluator_word_overlap_max": 0.8125,
+    "AnswerEvaluator_word_overlap_count": 15,
+    "AnswerEvaluator_answer_length_ratio_mean": 1.3929667530972087,
+    "AnswerEvaluator_answer_length_ratio_min": 0.40625,
+    "AnswerEvaluator_answer_length_ratio_max": 2.0,
+    "AnswerEvaluator_answer_length_ratio_count": 15,
+    "AnswerEvaluator_keyword_match_mean": 0.5368410309497266,
+    "AnswerEvaluator_keyword_match_min": 0.0,
+    "AnswerEvaluator_keyword_match_max": 1.0,
+    "AnswerEvaluator_keyword_match_count": 15,
+    "AnswerEvaluator_semantic_similarity_mean": 0.7916254253831121,
+    "AnswerEvaluator_semantic_similarity_min": 0.6467283235952443,
+    "AnswerEvaluator_semantic_similarity_max": 0.9272549005173862,
+    "AnswerEvaluator_semantic_similarity_count": 15,
+    "AnswerEvaluator_faithfulness_mean": 0.007407407407407407,
+    "AnswerEvaluator_faithfulness_min": 0.0,
+    "AnswerEvaluator_faithfulness_max": 0.1111111111111111,
+    "AnswerEvaluator_faithfulness_count": 15,
+    "RetrievalEvaluator_context_match_mean": 0.9833333333333333,
+    "RetrievalEvaluator_context_match_min": 0.75,
+    "RetrievalEvaluator_context_match_max": 1.0,
+    "RetrievalEvaluator_context_match_count": 15,
+    "RetrievalEvaluator_mean_reciprocal_rank_mean": 0.7888888888888889,
+    "RetrievalEvaluator_mean_reciprocal_rank_min": 0.3333333333333333,
+    "RetrievalEvaluator_mean_reciprocal_rank_max": 1.0,
+    "RetrievalEvaluator_mean_reciprocal_rank_count": 15,
+    "RetrievalEvaluator_recall_at_3_mean": 0.9277777777777777,
+    "RetrievalEvaluator_recall_at_3_min": 0.25,
+    "RetrievalEvaluator_recall_at_3_max": 1.0,
+    "RetrievalEvaluator_recall_at_3_count": 15,
+    "RetrievalEvaluator_recall_at_5_mean": 0.9833333333333333,
+    "RetrievalEvaluator_recall_at_5_min": 0.75,
+    "RetrievalEvaluator_recall_at_5_max": 1.0,
+    "RetrievalEvaluator_recall_at_5_count": 15,
+    "RetrievalEvaluator_recall_at_10_mean": 0.9833333333333333,
+    "RetrievalEvaluator_recall_at_10_min": 0.75,
+    "RetrievalEvaluator_recall_at_10_max": 1.0,
+    "RetrievalEvaluator_recall_at_10_count": 15,
+    "RetrievalEvaluator_precision_at_5_mean": 0.25333333333333335,
+    "RetrievalEvaluator_precision_at_5_min": 0.2,
+    "RetrievalEvaluator_precision_at_5_max": 0.6,
+    "RetrievalEvaluator_precision_at_5_count": 15,
+    "PerformanceEvaluator_response_time_score_mean": 0.0,
+    "PerformanceEvaluator_response_time_score_min": 0,
+    "PerformanceEvaluator_response_time_score_max": 0,
+    "PerformanceEvaluator_response_time_score_count": 15,
+    "PerformanceEvaluator_retrieval_waste_mean": 0.7333333333333333,
+    "PerformanceEvaluator_retrieval_waste_min": 0.19999999999999996,
+    "PerformanceEvaluator_retrieval_waste_max": 0.8,
+    "PerformanceEvaluator_retrieval_waste_count": 15,
+    "PerformanceEvaluator_answer_provided_mean": 1.0,
+    "PerformanceEvaluator_answer_provided_min": 1.0,
+    "PerformanceEvaluator_answer_provided_max": 1.0,
+    "PerformanceEvaluator_answer_provided_count": 15,
+    "per_difficulty": {
+      "easy": {
+        "AnswerEvaluator_exact_match_mean": 0.0,
+        "AnswerEvaluator_sequence_similarity_mean": 0.3499625546078635,
+        "AnswerEvaluator_word_overlap_mean": 0.36493055555555554,
+        "AnswerEvaluator_answer_length_ratio_mean": 1.365909090909091,
+        "AnswerEvaluator_keyword_match_mean": 0.4861607142857143,
+        "AnswerEvaluator_semantic_similarity_mean": 0.8036505669535882,
+        "AnswerEvaluator_faithfulness_mean": 0.0,
+        "RetrievalEvaluator_context_match_mean": 1.0,
+        "RetrievalEvaluator_mean_reciprocal_rank_mean": 0.8333333333333334,
+        "RetrievalEvaluator_recall_at_3_mean": 1.0,
+        "RetrievalEvaluator_recall_at_5_mean": 1.0,
+        "RetrievalEvaluator_recall_at_10_mean": 1.0,
+        "RetrievalEvaluator_precision_at_5_mean": 0.2,
+        "PerformanceEvaluator_response_time_score_mean": 0.0,
+        "PerformanceEvaluator_retrieval_waste_mean": 0.8,
+        "PerformanceEvaluator_answer_provided_mean": 1.0
+      },
+      "medium": {
+        "AnswerEvaluator_exact_match_mean": 0.0,
+        "AnswerEvaluator_sequence_similarity_mean": 0.22028691742308304,
+        "AnswerEvaluator_word_overlap_mean": 0.25919185364484604,
+        "AnswerEvaluator_answer_length_ratio_mean": 1.3489780993042377,
+        "AnswerEvaluator_keyword_match_mean": 0.5200244200244201,
+        "AnswerEvaluator_semantic_similarity_mean": 0.8168682702079887,
+        "AnswerEvaluator_faithfulness_mean": 0.018518518518518517,
+        "RetrievalEvaluator_context_match_mean": 1.0,
+        "RetrievalEvaluator_mean_reciprocal_rank_mean": 0.9166666666666666,
+        "RetrievalEvaluator_recall_at_3_mean": 1.0,
+        "RetrievalEvaluator_recall_at_5_mean": 1.0,
+        "RetrievalEvaluator_recall_at_10_mean": 1.0,
+        "RetrievalEvaluator_precision_at_5_mean": 0.19999999999999998,
+        "PerformanceEvaluator_response_time_score_mean": 0.0,
+        "PerformanceEvaluator_retrieval_waste_mean": 0.7999999999999999,
+        "PerformanceEvaluator_answer_provided_mean": 1.0
+      },
+      "hard": {
+        "AnswerEvaluator_exact_match_mean": 0.0,
+        "AnswerEvaluator_sequence_similarity_mean": 0.4411406531909983,
+        "AnswerEvaluator_word_overlap_mean": 0.32359054662895514,
+        "AnswerEvaluator_answer_length_ratio_mean": 1.4673992673992673,
+        "AnswerEvaluator_keyword_match_mean": 0.5975652173913044,
+        "AnswerEvaluator_semantic_similarity_mean": 0.7517138983368795,
+        "AnswerEvaluator_faithfulness_mean": 0.0,
+        "RetrievalEvaluator_context_match_mean": 0.95,
+        "RetrievalEvaluator_mean_reciprocal_rank_mean": 0.6,
+        "RetrievalEvaluator_recall_at_3_mean": 0.7833333333333333,
+        "RetrievalEvaluator_recall_at_5_mean": 0.95,
+        "RetrievalEvaluator_recall_at_10_mean": 0.95,
+        "RetrievalEvaluator_precision_at_5_mean": 0.36000000000000004,
+        "PerformanceEvaluator_response_time_score_mean": 0.0,
+        "PerformanceEvaluator_retrieval_waste_mean": 0.6,
+        "PerformanceEvaluator_answer_provided_mean": 1.0
+      }
+    },
+    "success_rate": 1.0,
+    "avg_response_time": 34.20977493921916
+  }
+}
