@@ -157,7 +157,7 @@ class RetrievalEvaluator(BaseEvaluator):
             )
             log.info(f"Recall@{k:2d}                : {recall_k:.4f}")
         log.info(
-            f"Precision@{self.config.pipeline.top_k}              : {precision_k:.4f}"
+            f"Precision@{self.config.pipeline.top_k:2d}             : {precision_k:.4f}"
         )
         if matched_files:
             log.info(f"Matched files            : {sorted(matched_files)}")

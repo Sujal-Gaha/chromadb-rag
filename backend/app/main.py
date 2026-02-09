@@ -1,11 +1,10 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List, Optional
 
 from fastapi.responses import JSONResponse
 import uvicorn
 
-from app.model import QueryRequest
+from app.model import QueryRequest, UploadFilesRequest
 from evaluation.v3.run_evaluation import run_evaluation
 
 from .rag_pipeline import RAGPipeline
@@ -17,8 +16,6 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
 )
 
 
@@ -33,9 +30,9 @@ async def home():
 
 
 @app.post("/api/upload")
-async def upload_files(files: List[UploadFile] = File(...)):
+async def upload_files(payload: UploadFilesRequest):
     try:
-        result = await rag_pipeline.index_files(files)
+        result = await rag_pipeline.index_files(payload.files)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -44,7 +41,6 @@ async def upload_files(files: List[UploadFile] = File(...)):
 @app.post("/api/upload/single")
 async def upload_single_file(
     file: UploadFile = File(...),
-    metadata: Optional[str] = None,
 ):
     """
     Alternative endpoint for single file upload

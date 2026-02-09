@@ -3,6 +3,8 @@ import time
 import tempfile
 import asyncio
 import re
+from haystack.utils.device import ComponentDevice
+import torch
 
 from pathlib import Path
 from typing import Any
@@ -15,6 +17,7 @@ from haystack.components.builders import PromptBuilder
 from haystack.components.converters import PyPDFToDocument, TextFileToDocument
 from haystack.components.preprocessors import DocumentSplitter
 from haystack.components.writers import DocumentWriter
+from haystack.components.rankers import SentenceTransformersSimilarityRanker
 
 from haystack.document_stores.types.policy import DuplicatePolicy
 from haystack_integrations.components.generators.ollama import OllamaGenerator
@@ -129,6 +132,13 @@ class RAGPipeline:
             top_k=self.config.pipeline.top_k,
         )
 
+        device_str = "cuda" if torch.cuda.is_available() else "cpu"
+        device = ComponentDevice.from_str(device_str)
+        reranker = SentenceTransformersSimilarityRanker(
+            model="cross-encoder/ms-marco-MiniLM-L-6-v2", top_k=5, device=device
+        )
+        log.info(f"Reranker initialized on device: {device}")
+
         template = """
         You are a strictly faithful assistant. Follow these rules:
         
@@ -174,13 +184,16 @@ class RAGPipeline:
 
         self.query_pipeline.add_component("text_embedder", text_embedder)
         self.query_pipeline.add_component("retriever", retriever)
+        self.query_pipeline.add_component("reranker", reranker)
         self.query_pipeline.add_component("prompt_builder", prompt_builder)
         self.query_pipeline.add_component("llm", ollama_generator)
 
         self.query_pipeline.connect(
             "text_embedder.embedding", "retriever.query_embedding"
         )
-        self.query_pipeline.connect("retriever.documents", "prompt_builder.documents")
+        # self.query_pipeline.connect("retriever.documents", "prompt_builder.documents")
+        self.query_pipeline.connect("retriever.documents", "reranker.documents")
+        self.query_pipeline.connect("reranker.documents", "prompt_builder.documents")
         self.query_pipeline.connect("prompt_builder", "llm")
 
         log.info("Query pipeline initialized")
@@ -290,6 +303,7 @@ class RAGPipeline:
                 data={
                     "text_embedder": {"text": question},
                     "prompt_builder": {"question": question},
+                    "reranker": {"query": question},
                 },
                 include_outputs_from=set(["retriever", "llm", "text_embedder"]),
             )
