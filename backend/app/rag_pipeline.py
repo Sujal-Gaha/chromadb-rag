@@ -162,6 +162,7 @@ class RAGPipeline:
                 "temperature": self.config.llm.temperature,
                 "num_ctx": self.config.llm.num_ctx,
                 "top_p": self.config.llm.top_p,
+                "repeat_penalty": 1.1,
             },
         )
 
@@ -294,6 +295,12 @@ class RAGPipeline:
             )
 
             reply = result["llm"]["replies"][0]
+            if not reply.strip():
+                log.warning(
+                    f"Empty generation for question: {question}. Raw meta: {result['llm'].get('meta', 'No meta')}"
+                )
+                reply = "The provided context does not contain sufficient information to answer this question."
+
             retrieved_docs = result.get("retriever", {}).get("documents", [])
 
             # Build sources with proper filename extraction

@@ -1,13 +1,12 @@
-from pathlib import Path
 from fastapi import FastAPI, UploadFile, File, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Optional
 
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import JSONResponse
 import uvicorn
 
 from app.model import QueryRequest
-from evaluation.v3.run_evaluator import run_evaluation
+from evaluation.v3.run_evaluation import run_evaluation
 
 from .rag_pipeline import RAGPipeline
 
@@ -138,7 +137,6 @@ async def evaluate_and_get_summary(batch_size: int = Body(3, embed=True)):
             batch_size=batch_size,
             output_dir=output_dir,
             create_visualizations=False,
-            create_reports=False,
             save_results=False,
         )
         return JSONResponse(content=summary)
