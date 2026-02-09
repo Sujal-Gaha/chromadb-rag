@@ -1,4 +1,3 @@
-from haystack.logging import getLogger
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -9,7 +8,9 @@ from pathlib import Path
 from matplotlib.figure import Figure
 from pandas import Series
 
-log = getLogger(__name__)
+from utils.logger import get_logger
+
+log = get_logger(__name__)
 
 
 class EvaluationVisualizer:

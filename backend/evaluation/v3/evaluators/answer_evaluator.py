@@ -6,7 +6,6 @@ from typing import Any, Optional, Union
 from sklearn.metrics.pairwise import cosine_similarity
 
 from haystack import Document
-from haystack.logging import getLogger
 from evaluation.v3.base.evaluator_base import (
     BaseEvaluator,
     EvaluationResult,
@@ -22,8 +21,9 @@ from haystack_integrations.components.generators.ollama import (
 from haystack_integrations.components.embedders.ollama import OllamaTextEmbedder
 
 from utils.config import Config
+from utils.logger import get_logger
 
-log = getLogger(__name__)
+log = get_logger(__name__)
 
 
 class AnswerEvaluator(BaseEvaluator):
@@ -136,34 +136,57 @@ class AnswerEvaluator(BaseEvaluator):
         )
 
         sas_score = 0.0
-        try:
-            expected_result = self.embedder.run(text=expected_answer)
-            expected_embedding = expected_result["embedding"]
 
-            generated_result = self.embedder.run(text=generated_answer)
-            generated_embedding = generated_result["embedding"]
-
-            expected_array = np.array([expected_embedding])
-            generated_array = np.array([generated_embedding])
-
-            sas_score = cosine_similarity(expected_array, generated_array)[0][0]
-
-        except Exception as e:
-            log.error(f"Semantic similarity evaluation failed: {e}, defaulting to 0.0")
-            sas_score = 0.0
-
-        results.append(
-            EvaluationResult(
-                evaluator_type=self.name,
-                metric_name="semantic_similarity",
-                value=sas_score,
-                confidence=0.95,
-                metadata={
-                    "method": "OllamaEmbedder",
-                    "model": self.config.ollama.embedding_model,
-                },
+        if not expected_answer.strip() or not generated_answer.strip():
+            log.info(
+                "Skipping semantic similarity — one or both answers empty. "
+                f"Question: {question[:60]!r}"
+                f"Expected answer: {expected_answer}"
+                f"Generated answer: {generated_answer}"
             )
-        )
+            sas_score = 0.0
+            results.append(
+                EvaluationResult(
+                    evaluator_type=self.name,
+                    metric_name="semantic_similarity",
+                    value=0.0,
+                    confidence=0.95,
+                    metadata={
+                        "reason": "one or both answers were empty/whitespace-only"
+                    },
+                )
+            )
+        else:
+            try:
+                expected_result = self.embedder.run(text=expected_answer)
+                expected_embedding = expected_result["embedding"]
+
+                generated_result = self.embedder.run(text=generated_answer)
+                generated_embedding = generated_result["embedding"]
+
+                expected_array = np.array([expected_embedding])
+                generated_array = np.array([generated_embedding])
+
+                sas_score = cosine_similarity(expected_array, generated_array)[0][0]
+
+            except Exception as e:
+                log.error(
+                    f"Semantic similarity evaluation failed: {e}, defaulting to 0.0"
+                )
+                sas_score = 0.0
+
+            results.append(
+                EvaluationResult(
+                    evaluator_type=self.name,
+                    metric_name="semantic_similarity",
+                    value=sas_score,
+                    confidence=0.95,
+                    metadata={
+                        "method": "OllamaEmbedder",
+                        "model": self.config.ollama.embedding_model,
+                    },
+                )
+            )
 
         contexts = [
             doc.content if isinstance(doc, Document) else str(doc)

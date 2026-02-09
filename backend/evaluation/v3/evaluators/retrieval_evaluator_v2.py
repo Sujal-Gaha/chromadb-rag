@@ -4,7 +4,6 @@ import re
 from typing import Any, Optional, Union
 
 from haystack import Document
-from haystack.logging import getLogger
 from haystack.components.evaluators import (
     DocumentMAPEvaluator,
     DocumentMRREvaluator,
@@ -17,8 +16,9 @@ from evaluation.v3.base.evaluator_base import (
 )
 
 from utils.config import Config
+from utils.logger import get_logger
 
-log = getLogger(__name__)
+log = get_logger(__name__)
 
 
 class RetrievalEvaluatorV2(BaseEvaluator):

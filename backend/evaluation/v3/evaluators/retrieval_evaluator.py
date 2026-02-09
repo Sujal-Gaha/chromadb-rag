@@ -1,15 +1,16 @@
 from typing import Any, Optional, Union, List, Set
 
 from haystack import Document
-from haystack.logging import getLogger
 from evaluation.v3.base.evaluator_base import (
     BaseEvaluator,
     EvaluationResult,
     EvaluationType,
 )
-from utils.config import Config
 
-log = getLogger(__name__)
+from utils.config import Config
+from utils.logger import get_logger
+
+log = get_logger(__name__)
 
 
 class RetrievalEvaluator(BaseEvaluator):

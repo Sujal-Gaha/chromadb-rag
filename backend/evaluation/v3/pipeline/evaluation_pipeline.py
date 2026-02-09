@@ -2,10 +2,10 @@ import os
 import time
 import asyncio
 import re
+import pandas as pd
 from datetime import datetime
 from typing import Any, Optional
 from haystack import Document
-from haystack.logging import getLogger
 from evaluation.v3.base.evaluator_base import (
     BaseEvaluator,
     BatchResult,
@@ -14,9 +14,10 @@ from evaluation.v3.base.evaluator_base import (
 )
 from evaluation.v3.base.metrics_store import MetricsStore
 from evaluation.v3.data.gold_data import DOCUMENT_CONTENTS, Difficulty, GoldData
-import pandas as pd
 
-log = getLogger(__name__)
+from utils.logger import get_logger
+
+log = get_logger(__name__)
 
 
 class EvaluationPipeline:
