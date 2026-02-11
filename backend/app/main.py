@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, UploadFile, File, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -9,19 +10,22 @@ from evaluation.v3.run_evaluation import run_evaluation
 
 from .rag_pipeline import RAGPipeline
 
-app = FastAPI()
 rag_pipeline = RAGPipeline()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    rag_pipeline.initialize()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
 )
-
-
-@app.on_event("startup")
-async def startup():
-    rag_pipeline.initialize()
 
 
 @app.get("/")
