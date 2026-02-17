@@ -9,7 +9,7 @@ from typing import Optional
 sys.path.insert(0, os.path.join(Path(__file__).parent.parent.parent))
 
 from app.rag_pipeline import RAGPipeline
-from evaluation.v3.data.gold_data import (
+from evaluation.v3.gold_data.gold_data import (
     GOLD_DATA,
 )
 

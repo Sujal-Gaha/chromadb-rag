@@ -13,7 +13,7 @@ from evaluation.v3.base.evaluator_base import (
     QuestionResult,
 )
 from evaluation.v3.base.metrics_store import MetricsStore
-from evaluation.v3.data.gold_data import DOCUMENT_CONTENTS, Difficulty, GoldData
+from evaluation.v3.gold_data.gold_data import DOCUMENT_CONTENTS, Difficulty, GoldData
 
 from utils.logger import get_logger
 
