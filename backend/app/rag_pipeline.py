@@ -3,8 +3,6 @@ import time
 import tempfile
 import asyncio
 import re
-from haystack.utils.device import ComponentDevice
-import torch
 
 from pathlib import Path
 from typing import Any
@@ -13,15 +11,17 @@ from contextlib import asynccontextmanager
 from fastapi import UploadFile
 
 from haystack import Pipeline
+
 from haystack.components.builders import PromptBuilder
 from haystack.components.converters import PyPDFToDocument, TextFileToDocument
 from haystack.components.preprocessors import DocumentSplitter
 from haystack.components.writers import DocumentWriter
-from haystack.components.rankers import SentenceTransformersSimilarityRanker
 
 from haystack.document_stores.types.policy import DuplicatePolicy
-from haystack_integrations.components.generators.ollama import OllamaGenerator
+
 from haystack_integrations.document_stores.chroma import ChromaDocumentStore
+
+from haystack_integrations.components.generators.ollama import OllamaGenerator
 from haystack_integrations.components.retrievers.chroma import ChromaEmbeddingRetriever
 from haystack_integrations.components.embedders.ollama import (
     OllamaDocumentEmbedder,
@@ -30,6 +30,8 @@ from haystack_integrations.components.embedders.ollama import (
 
 from utils.logger import get_logger
 from utils.config import get_config
+
+from components.ollama_reranker import OllamaReranker
 
 log = get_logger(__name__)
 
@@ -132,12 +134,14 @@ class RAGPipeline:
             top_k=self.config.pipeline.top_k,
         )
 
-        device_str = "cuda" if torch.cuda.is_available() else "cpu"
-        device = ComponentDevice.from_str(device_str=device_str)
-        reranker = SentenceTransformersSimilarityRanker(
-            model="cross-encoder/ms-marco-MiniLM-L-6-v2", top_k=5, device=device
+        reranker = OllamaReranker(
+            model=self.config.ollama.reranker_model,
+            url=self.config.ollama.server_url,
+            timeout=self.config.ollama.timeout,
+            top_k=5,
         )
-        log.info(f"Reranker initialized on device: {device}")
+
+        log.info("Reranker initialized")
 
         template = """
         You are a strictly faithful assistant. Follow these rules:
