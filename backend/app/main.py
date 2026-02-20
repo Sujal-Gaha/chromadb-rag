@@ -36,7 +36,7 @@ async def home():
 @app.post("/api/upload")
 async def upload_files(payload: UploadFilesRequest):
     try:
-        result = await rag_pipeline.index_files(payload.files)
+        result = await rag_pipeline.index_files(files=payload.files)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -50,7 +50,7 @@ async def upload_single_file(
     Alternative endpoint for single file upload
     """
     try:
-        result = await rag_pipeline.index_files([file])
+        result = await rag_pipeline.index_files(files=[file])
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -59,7 +59,7 @@ async def upload_single_file(
 @app.post("/api/query")
 async def query(payload: QueryRequest):
     try:
-        result = await rag_pipeline.query(payload.question)
+        result = await rag_pipeline.query(question=payload.question)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -84,7 +84,7 @@ class AnswerEvaluator(BaseEvaluator):
         )
 
         sequence_similarity = self._calculate_sequence_similarity(
-            expected_answer, generated_answer
+            reference=expected_answer, candidate=generated_answer
         )
 
         results.append(
@@ -96,7 +96,9 @@ class AnswerEvaluator(BaseEvaluator):
             )
         )
 
-        word_overlap = self._calculate_word_overlap(expected_answer, generated_answer)
+        word_overlap = self._calculate_word_overlap(
+            reference=expected_answer, candidate=generated_answer
+        )
 
         results.append(
             EvaluationResult(
@@ -124,7 +126,9 @@ class AnswerEvaluator(BaseEvaluator):
             )
         )
 
-        keyword_match = self._calculate_keyword_match(expected_answer, generated_answer)
+        keyword_match = self._calculate_keyword_match(
+            reference=expected_answer, candidate=generated_answer
+        )
 
         results.append(
             EvaluationResult(

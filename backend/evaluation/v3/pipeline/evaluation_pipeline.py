@@ -6,6 +6,7 @@ import pandas as pd
 from datetime import datetime
 from typing import Any, Optional
 from haystack import Document
+from app.rag_pipeline import RAGPipeline
 from evaluation.v3.base.evaluator_base import (
     BaseEvaluator,
     BatchResult,
@@ -23,7 +24,7 @@ log = get_logger(__name__)
 class EvaluationPipeline:
     def __init__(
         self,
-        rag_pipeline,
+        rag_pipeline: RAGPipeline,
     ):
         self.rag_pipeline = rag_pipeline
         self.max_retries = 3
@@ -121,7 +122,7 @@ class EvaluationPipeline:
         while retries < self.max_retries:
             try:
                 start_time = time.time()
-                rag_result = await self.rag_pipeline.query(question)
+                rag_result = await self.rag_pipeline.query(question=question)
                 generated_answer = rag_result.get("reply", "")
                 sources = rag_result.get("sources", [])
                 retrieved_docs = []

@@ -45,9 +45,9 @@ class RAGPipeline:
 
         try:
             self.config = get_config()
-            self.config.log_summary(log)
+            self.config.log_summary(logger=log)
 
-            os.makedirs(self.config.chromadb.persist_path, exist_ok=True)
+            os.makedirs(name=self.config.chromadb.persist_path, exist_ok=True)
             log.info(f"ChromaDB directory ensured: {self.config.chromadb.persist_path}")
 
             self._setup_chromadb()
@@ -119,8 +119,8 @@ class RAGPipeline:
 
             return pipeline
 
-        self.pdf_indexing_pipeline = build_pipeline(PyPDFToDocument())
-        self.txt_indexing_pipeline = build_pipeline(TextFileToDocument())
+        self.pdf_indexing_pipeline = build_pipeline(converter=PyPDFToDocument())
+        self.txt_indexing_pipeline = build_pipeline(converter=TextFileToDocument())
 
         log.info("Indexing pipelines (PDF, TXT) initialized")
 
@@ -133,7 +133,7 @@ class RAGPipeline:
         )
 
         device_str = "cuda" if torch.cuda.is_available() else "cpu"
-        device = ComponentDevice.from_str(device_str)
+        device = ComponentDevice.from_str(device_str=device_str)
         reranker = SentenceTransformersSimilarityRanker(
             model="cross-encoder/ms-marco-MiniLM-L-6-v2", top_k=5, device=device
         )
@@ -182,19 +182,26 @@ class RAGPipeline:
             timeout=self.config.ollama.timeout,
         )
 
-        self.query_pipeline.add_component("text_embedder", text_embedder)
-        self.query_pipeline.add_component("retriever", retriever)
-        self.query_pipeline.add_component("reranker", reranker)
-        self.query_pipeline.add_component("prompt_builder", prompt_builder)
-        self.query_pipeline.add_component("llm", ollama_generator)
-
-        self.query_pipeline.connect(
-            "text_embedder.embedding", "retriever.query_embedding"
+        # Add components
+        self.query_pipeline.add_component(name="text_embedder", instance=text_embedder)
+        self.query_pipeline.add_component(name="retriever", instance=retriever)
+        self.query_pipeline.add_component(name="reranker", instance=reranker)
+        self.query_pipeline.add_component(
+            name="prompt_builder", instance=prompt_builder
         )
-        # self.query_pipeline.connect("retriever.documents", "prompt_builder.documents")
-        self.query_pipeline.connect("retriever.documents", "reranker.documents")
-        self.query_pipeline.connect("reranker.documents", "prompt_builder.documents")
-        self.query_pipeline.connect("prompt_builder", "llm")
+        self.query_pipeline.add_component(name="llm", instance=ollama_generator)
+
+        # Connect components
+        self.query_pipeline.connect(
+            sender="text_embedder.embedding", receiver="retriever.query_embedding"
+        )
+        self.query_pipeline.connect(
+            sender="retriever.documents", receiver="reranker.documents"
+        )
+        self.query_pipeline.connect(
+            sender="reranker.documents", receiver="prompt_builder.documents"
+        )
+        self.query_pipeline.connect(sender="prompt_builder", receiver="llm")
 
         log.info("Query pipeline initialized")
 
@@ -239,11 +246,11 @@ class RAGPipeline:
                     # Run indexing pipeline
                     if suffix == ".pdf":
                         result = self.pdf_indexing_pipeline.run(
-                            {"converter": {"sources": [tmp_path], "meta": meta}}
+                            data={"converter": {"sources": [tmp_path], "meta": meta}}
                         )
                     elif suffix == ".txt":
                         result = self.txt_indexing_pipeline.run(
-                            {"converter": {"sources": [tmp_path], "meta": meta}}
+                            data={"converter": {"sources": [tmp_path], "meta": meta}}
                         )
                     else:
                         raise ValueError(
@@ -265,7 +272,7 @@ class RAGPipeline:
                 finally:
                     if tmp_path and os.path.exists(tmp_path):
                         try:
-                            os.unlink(tmp_path)
+                            os.unlink(path=tmp_path)
                             log.debug(f"Deleted temp file: {tmp_path}")
                         except Exception as e:
                             log.warning(f"Could not delete temp file {tmp_path}: {e}")
@@ -321,7 +328,7 @@ class RAGPipeline:
             sources = []
             if retrieved_docs:
                 for doc in retrieved_docs:
-                    filename = self._extract_filename_from_metadata(doc.meta)
+                    filename = self._extract_filename_from_metadata(meta=doc.meta)
 
                     # If metadata fails or returns temp/unknown, extract from content
                     if (
@@ -330,7 +337,7 @@ class RAGPipeline:
                         or filename == "unknown"
                     ):
                         content_filename = self._extract_original_filename_from_content(
-                            doc.content
+                            content=doc.content
                         )
                         if content_filename != "unknown-document.txt":
                             filename = content_filename

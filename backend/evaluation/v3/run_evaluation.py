@@ -48,13 +48,13 @@ async def run_evaluation(
     config = get_config()
 
     answer_evaluator = AnswerEvaluator(config=config)
-    eval_pipeline.register_evaluator(answer_evaluator)
+    eval_pipeline.register_evaluator(evaluator=answer_evaluator)
 
     retrieval_evaluator = RetrievalEvaluator(config=config)
-    eval_pipeline.register_evaluator(retrieval_evaluator)
+    eval_pipeline.register_evaluator(evaluator=retrieval_evaluator)
 
     performance_evaluator = PerformanceEvaluator(config=config)
-    eval_pipeline.register_evaluator(performance_evaluator)
+    eval_pipeline.register_evaluator(evaluator=performance_evaluator)
 
     log.info(f"Registered {len(eval_pipeline.evaluators)} evaluators")
 
