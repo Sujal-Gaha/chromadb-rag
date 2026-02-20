@@ -14,6 +14,7 @@ class OllamaConfig:
     model: str
     judge_model: str
     embedding_model: str
+    reranker_model: str
     timeout: int = 120
 
     def validate(self) -> list[str]:
@@ -34,6 +35,9 @@ class OllamaConfig:
 
         if not self.embedding_model:
             errors.append("OLLAMA_EMBEDDING_MODEL is not set")
+
+        if not self.reranker_model:
+            errors.append("OLLAMA_RERANKER_MODEL is not set")
 
         if self.timeout <= 0:
             errors.append(f"Ollama timeout must be positive, got: {self.timeout}")
@@ -141,6 +145,7 @@ class Config:
             model=os.getenv("OLLAMA_MODEL", "llama3.2"),
             judge_model=os.getenv("OLLAMA_JUDGE_MODEL", "llama3.1:8b"),
             embedding_model=os.getenv("OLLAMA_EMBEDDING_MODEL", "nomic-embed-text"),
+            reranker_model=os.getenv("OLLAMA_RERANKER_MODEL", "llama3.1:8b"),
             timeout=self._get_int_env("OLLAMA_TIMEOUT", 120),
         )
 
@@ -209,6 +214,7 @@ class Config:
                 "server_url": self.ollama.server_url,
                 "model": self.ollama.model,
                 "embedding_model": self.ollama.embedding_model,
+                "reranker_model": self.ollama.reranker_model,
                 "timeout": self.ollama.timeout,
             },
             "chromadb": {
@@ -238,6 +244,7 @@ class Config:
         logger.info(f"  LLM Model: {self.ollama.model}")
         logger.info(f"  LLM Judge Model: {self.ollama.judge_model}")
         logger.info(f"  Embedding Model: {self.ollama.embedding_model}")
+        logger.info(f"  Reranker Model: {self.ollama.reranker_model}")
         logger.info(f"  Timeout: {self.ollama.timeout}s")
         logger.info("")
 
